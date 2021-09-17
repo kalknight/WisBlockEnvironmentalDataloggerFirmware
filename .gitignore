@@ -1,0 +1,7 @@
+# Local VS code settings
+.pio
+.clang-format
+.vscode/
+
+# Must ignore OTAA keys for security reasons see LoRaWAN Functs README
+OTAA_keys.h
