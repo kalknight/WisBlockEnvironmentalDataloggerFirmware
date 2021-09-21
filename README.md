@@ -23,6 +23,8 @@ First you'll need to [install VS Code](https://code.visualstudio.com/Download) -
 
 Then you'll want to follow [this](https://docs.rakwireless.com/Knowledge-Hub/Learn/Board-Support-Package-Installation-in-PlatformIO/) guide to setup Platform IO and install the necessary files for _LoRaWan-RAK4630.h_. If the link in step 6 is broken, use [this](https://github.com/RAKWireless/WisBlock) one.
 
+> NOTE: I have found that the wiscore files may need to be re-copied after an update to PIO.
+
 Then depending on what you're doing you can either:
 
 - (Recommended) Clone the repo and create your own branch to work on. You can do this directly in VS code by going to Source Control on the left (Crtl + Shift + G).
