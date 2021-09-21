@@ -1,4 +1,4 @@
-# WisBlock Firmware
+# WisBlock Environmental Datalogger Firmware
 
 ## How to use this Repo
 
