@@ -221,11 +221,12 @@ struct portSchema {
     /**
      * @brief Encodes the given sensor data into the payload according to the port's schema.
      * Calls sensorPortSchema::encodeData for each sensor.
-     * @param sensor_data     Sensor data to be encoded.
+     * @param sensor_data Sensor data to be encoded.
      * @param payload_buffer Payload buffer for data to be written into.
+     * @param start_pos Start encoding data at this byte. Defaults to 0.
      * @return Total length of data encoded to payload_buffer.
      */
-    uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer);
+    uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer, uint8_t start_pos = 0);
 };
 ```
 

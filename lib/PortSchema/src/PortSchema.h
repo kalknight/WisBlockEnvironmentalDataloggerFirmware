@@ -5,7 +5,8 @@
  * @file PortSchema.h
  * @author Kalina Knight (kalina.knight77@gmail.com)
  * @brief Port schema definition as descibed the README.
- * Schema's include the functions for encoding the data to the LoRaWAN payload as well.
+ * Schema's include the functions for encoding the data to the LoRaWAN payload
+ * as well.
  *
  * @version 0.1
  * @date 2021-08-24
@@ -18,7 +19,8 @@
 #include "Logging.h"          /**< Go here to change the logging level for the entire application. */
 #include "SensorPortSchema.h" /**< Go here for the individual sensor schema definitions. */
 
-/** @brief portSchema describes which sensor data to include in each port and hence the payload. */
+/** @brief portSchema describes which sensor data to include in each port and
+ * hence the payload. */
 class portSchema {
   public:
     uint8_t port_number;
@@ -35,13 +37,14 @@ class portSchema {
     */
 
     /**
-     * @brief Encodes the given sensor data into the payload according to the port's schema.
-     * Calls sensorPortSchema::encodeData for each sensor.
-     * @param sensor_data     Sensor data to be encoded.
+     * @brief Encodes the given sensor data into the payload according to the
+     * port's schema. Calls sensorPortSchema::encodeData for each sensor.
+     * @param sensor_data Sensor data to be encoded.
      * @param payload_buffer Payload buffer for data to be written into.
+     * @param start_pos Start encoding data at this byte. Defaults to 0.
      * @return Total length of data encoded to payload_buffer.
      */
-    uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer);
+    uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer, uint8_t start_pos = 0);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

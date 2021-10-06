@@ -1,12 +1,12 @@
 #include "PortSchema.h"
 
-uint8_t portSchema::encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer) {
+uint8_t portSchema::encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer, uint8_t start_pos) {
     /* If the data should be included in the payload according to the portSchema, then encode the value.
      * he order of these if statements is the order the sensor data will be encoded into the payload and should match
      * the schema.
      * The buffsize is increased by the amount of data encoded in each step.
      */
-    uint8_t payload_length = 0;
+    uint8_t payload_length = start_pos;
     if (sendBatteryVoltage) {
         payload_length = batteryVoltageSchema.encodeData(
             sensor_data->battery_mv.value, sensor_data->battery_mv.is_valid, payload_buffer, payload_length);
