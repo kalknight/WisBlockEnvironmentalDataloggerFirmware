@@ -69,13 +69,15 @@ class sensorPortSchema {
      * invalid 2 byte signed the value will be 0x7f7f.
      * @param sensor_data Sensor data to encode (valid data types: int, float, uint8_t, uint16_t, uint32_t).
      * @param valid Validity of given sensor data.
-     * @param lorawan_payload LoRaWAN payload with buffer for data to be written into.
+     * @param payload_buffer Payload buffer for data to be written into.
+     * @param current_buffer_len Length of current data in the buffer, used to avoid overwriting data.
+     * @return Total length of data encoded to payload_buffer.
      */
-    void encodeData(int sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const;
-    void encodeData(float sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const;
-    void encodeData(uint8_t sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const;
-    void encodeData(uint16_t sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const;
-    void encodeData(uint32_t sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const;
+    uint8_t encodeData(int sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+    uint8_t encodeData(float sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+    uint8_t encodeData(uint8_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+    uint8_t encodeData(uint16_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+    uint8_t encodeData(uint32_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

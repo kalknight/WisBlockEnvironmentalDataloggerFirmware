@@ -104,7 +104,7 @@ void fillPayload(void) {
     lorawan_payload.port = payload_port.port_number;
 
     // encode the sensor data to lorawan_payload
-    payload_port.encodeSensorDataToPayload(&sensor_data, &lorawan_payload);
+    lorawan_payload.buffsize = payload_port.encodeSensorDataToPayload(&sensor_data, payload_buffer);
 
     // log the encoded bytes
     char encoded_payload_bytes[3 * PAYLOAD_BUFFER_SIZE] = {};

@@ -84,7 +84,7 @@ void loop() {
         lorawan_payload.port = payload_port.port_number;
 
         // encode the sensor data to lorawan_payload
-        payload_port.encodeSensorDataToPayload(&sensor_data, &lorawan_payload);
+        lorawan_payload.buffsize = payload_port.encodeSensorDataToPayload(&sensor_data, payload_buffer);
 
         // log the encoded bytes
         char encoded_payload_bytes[3 * PAYLOAD_BUFFER_SIZE] = {};
@@ -200,7 +200,7 @@ will be encoded that fills the number of bytes assigned to that sensor data and 
 
 > E.g. For an invalid 2 byte signed the value will be 0x7f7f.
 
-This has been elected as an alternative to changing the port number to match what sensor data is available, as otherwise it would be difficult to tell the difference between a sensor having issues and the wrong port being used. See the [suggested next steps for the decoder](../../../decoder/#suggested-next-steps) on ways the invalid data could be used more intelligently.
+This has been elected as an alternative to changing the port number to match what sensor data is available, as otherwise it would be difficult to tell the difference between a sensor having issues and the wrong port being used. See the [suggested next steps for the decoder](https://github.com/minisolarunsw/LoRaWANProjectRepo/tree/main/Ubidots/PayloadDecoder/#suggested-next-steps) on ways the invalid data could be used more intelligently.
 
 ### portSchema
 
@@ -222,9 +222,10 @@ struct portSchema {
      * @brief Encodes the given sensor data into the payload according to the port's schema.
      * Calls sensorPortSchema::encodeData for each sensor.
      * @param sensor_data     Sensor data to be encoded.
-     * @param lorawan_payload LoRaWAN payload structure that data is encoded into.
+     * @param payload_buffer Payload buffer for data to be written into.
+     * @return Total length of data encoded to payload_buffer.
      */
-    void encodeSensorDataToPayload(sensorData *sensor_data, lmh_app_data_t *lorawan_payload);
+    uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer);
 };
 ```
 
@@ -264,9 +265,11 @@ class sensorPortSchema {
      * ...
      * @param sensor_data Sensor data to encode (valid data types: int, float, uint8_t, uint16_t, uint32_t).
      * @param valid Validity of given sensor data.
-     * @param lorawan_payload LoRaWAN payload with buffer for data to be written into.
+     * @param payload_buffer Payload buffer for data to be written into.
+     * @param current_buffer_len Length of current data in the buffer, used to avoid overwriting data.
+     * @return Total length of data encoded to payload_buffer.
      */
-    void encodeData(<type> sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const;
+    uint8_t encodeData(<type> sensor_data, bool valid, uint8_t *payload_buffer) const;
 
 };
 ```
@@ -302,7 +305,7 @@ To add a new sensor, it is best practice to define a new port that includes the 
 2. Add the corresponding enabled flag to the portSchema class.
 3. Set the enabled flag for the new sensor to false in all existing defined ports. TIP: Replace (ctrl + h) or multi-cursor editting (alt + left click) are very handy for this.
 4. Add the new port with `const portSchema PORTX = {...};`, replacing `X` with the new port number.
-5. Finally add the port to the decoder on the web-app side.
+5. Finally add the port to the [decoder on the web-app side](https://github.com/minisolarunsw/LoRaWANProjectRepo/tree/main/Ubidots/PayloadDecoder).
 
 You should also update the table(s) above with the new port/sensor schema.
 

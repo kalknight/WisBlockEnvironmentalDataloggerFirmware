@@ -38,9 +38,10 @@ class portSchema {
      * @brief Encodes the given sensor data into the payload according to the port's schema.
      * Calls sensorPortSchema::encodeData for each sensor.
      * @param sensor_data     Sensor data to be encoded.
-     * @param lorawan_payload LoRaWAN payload structure that data is encoded into.
+     * @param payload_buffer Payload buffer for data to be written into.
+     * @return Total length of data encoded to payload_buffer.
      */
-    void encodeSensorDataToPayload(sensorData *sensor_data, lmh_app_data_t *lorawan_payload);
+    uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

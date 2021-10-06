@@ -8,12 +8,12 @@
  * invalid 2 byte signed the value will be 0x7f7f.
  * @param sensor_data Sensor data to encode. This template allows the type of sensor_data to be flexible (to a point).
  * @param valid Validity of given sensor data.
- * @param lorawan_payload LoRaWAN payload with buffer for data to be written into.
+ * @param payload_buffer LoRaWAN payload with buffer for data to be written into.
  * @param sensor_schema Sensor port schema that determines how the data is encoded.
+ * @return New total length of data encoded to payload_buffer.
  */
 template <typename T>
-void encodeDataWithSchema(T sensor_data, bool valid, lmh_app_data_t *lorawan_payload, const sensorPortSchema *sensor_schema) {
-    uint8_t buf_pos = lorawan_payload->buffsize;
+uint8_t encodeDataWithSchema(T sensor_data, bool valid, uint8_t *payload_buffer, uint8_t buf_pos, const sensorPortSchema *sensor_schema) {
     int data_to_encode = 0;
     // Check validity
     if (valid) {
@@ -46,14 +46,14 @@ void encodeDataWithSchema(T sensor_data, bool valid, lmh_app_data_t *lorawan_pay
         // This is a generalised form of basic MSB bitwise encoding
         uint8_t bitshift = j * 8; // 8 bits in a byte
         if (j > 0) {
-            lorawan_payload->buffer[buf_pos + i] = (uint8_t)((data_to_encode & (0xFF << bitshift)) >> bitshift);
+            payload_buffer[buf_pos + i] = (uint8_t)((data_to_encode & (0xFF << bitshift)) >> bitshift);
         } else {
-            lorawan_payload->buffer[buf_pos + i] = (uint8_t)(data_to_encode & 0xFF);
+            payload_buffer[buf_pos + i] = (uint8_t)(data_to_encode & 0xFF);
         }
     }
 
-    // increase the buffsize by the total length of the data written to the buffer
-    lorawan_payload->buffsize = buf_pos + i;
+    // return the new buffer length
+    return (buf_pos + i);
 }
 
 /**
@@ -62,22 +62,22 @@ void encodeDataWithSchema(T sensor_data, bool valid, lmh_app_data_t *lorawan_pay
  * sensorPortSchema.
  */
 
-void sensorPortSchema::encodeData(uint8_t sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const {
-    encodeDataWithSchema(sensor_data, valid, lorawan_payload, this);
+uint8_t sensorPortSchema::encodeData(uint8_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const {
+    return (encodeDataWithSchema(sensor_data, valid, payload_buffer, current_buffer_len, this));
 }
 
-void sensorPortSchema::encodeData(uint16_t sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const {
-    encodeDataWithSchema(sensor_data, valid, lorawan_payload, this);
+uint8_t sensorPortSchema::encodeData(uint16_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const {
+    return (encodeDataWithSchema(sensor_data, valid, payload_buffer, current_buffer_len, this));
 }
 
-void sensorPortSchema::encodeData(uint32_t sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const {
-    encodeDataWithSchema(sensor_data, valid, lorawan_payload, this);
+uint8_t sensorPortSchema::encodeData(uint32_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const {
+    return (encodeDataWithSchema(sensor_data, valid, payload_buffer, current_buffer_len, this));
 }
 
-void sensorPortSchema::encodeData(int sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const {
-    encodeDataWithSchema(sensor_data, valid, lorawan_payload, this);
+uint8_t sensorPortSchema::encodeData(int sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const {
+    return (encodeDataWithSchema(sensor_data, valid, payload_buffer, current_buffer_len, this));
 }
 
-void sensorPortSchema::encodeData(float sensor_data, bool valid, lmh_app_data_t *lorawan_payload) const {
-    encodeDataWithSchema(sensor_data, valid, lorawan_payload, this);
+uint8_t sensorPortSchema::encodeData(float sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const {
+    return (encodeDataWithSchema(sensor_data, valid, payload_buffer, current_buffer_len, this));
 }
