@@ -12,7 +12,7 @@ static void lorawanJoinedHandler(void);
 static void lorawanJoinedFailedHandler(void);
 static void lorawanRXHandler(lmh_app_data_t *app_data);
 
-bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey) {
+bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t tx_power) {
     log(LOG_LEVEL::DEBUG, "Initialising LoRaWAN...");
 
     // Initialize LoRa chip.
@@ -32,8 +32,8 @@ bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey) {
     lmh_setAppKey(appKey);
 
     // Fill the init params and callback structs for passing to lmh_init()
-    lora_init_params = { LORAWAN_ADR_OFF,  LORAWAN_DATERATE,     LORAWAN_PUBLIC_NETWORK, LORAWAN_JOIN_REQUEST_ATTEMPTS,
-                         LORAWAN_TX_POWER, LORAWAN_DUTYCYCLE_OFF };
+    lora_init_params = { LORAWAN_ADR_OFF, LORAWAN_DEFAULT_DATARATE, LORAWAN_PUBLIC_NETWORK, LORAWAN_JOIN_TRIALS,
+                         tx_power,        LORAWAN_DUTYCYCLE_OFF };
     lora_init_callbacks.BoardGetBatteryLevel = BoardGetBatteryLevel;
     lora_init_callbacks.BoardGetUniqueId = BoardGetUniqueId;
     lora_init_callbacks.BoardGetRandomSeed = BoardGetRandomSeed;
@@ -51,11 +51,11 @@ bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey) {
     return true;
 }
 
-bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, SoftwareTimer *timer) {
+bool initLoRaWAN(SoftwareTimer *timer, uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t tx_power) {
     // Save the timer so it can be started later by lorawanJoinedHandler()
     timer_to_start_on_join = timer;
     // Then init LoRaWAN
-    return initLoRaWAN(appEUI, deviceEUI, appKey);
+    return initLoRaWAN(appEUI, deviceEUI, appKey, tx_power);
 }
 
 // used by sendLoRaWANFrame() for logging

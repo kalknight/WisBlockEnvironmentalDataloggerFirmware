@@ -16,34 +16,33 @@
 
 #include "Logging.h"
 
-// LORAWAN CONFIG/PARAMETERS
+// LoRaWAN Config/Default Parameters - feel free to change these defaults to whatever suits the project
 static const DeviceClass_t loraClass = CLASS_A;                 /**< Class definition. */
 static const LoRaMacRegion_t loraRegion = LORAMAC_REGION_AU915; /**< Region:AU915. */
 static const lmh_confirm loraConfirm = LMH_UNCONFIRMED_MSG;     /**< Confirm/unconfirm packet definition. */
-
-#define LORAWAN_DATERATE              DR_3        /**< LoRaMac datarates: DR_0 to DR_5*/
-#define LORAWAN_TX_POWER              TX_POWER_10 /**< LoRaMac tx power: TX_POWER_0 to TX_POWER_10 (for AU915)*/
-#define LORAWAN_JOIN_REQUEST_ATTEMPTS 3           /**< Join request reattempts. */
-#define PAYLOAD_BUFFER_SIZE           64          /**< Data payload buffer size. */
+#define LORAWAN_JOIN_TRIALS 3                                   /**< Join request reattempts. */
+#define PAYLOAD_BUFFER_SIZE 64                                  /**< Data payload buffer size. */
 
 /**
  * @brief Initialise LoRaWAN.
  * @param appEUI    OTAA key app EUI.
  * @param deviceEUI OTAA key device EUI.
  * @param appKey    OTAA key app key.
+ * @param tx_power  TX power setting. (Defaults to LORAWAN_DEFAULT_TX_POWER). TX_POWER_0 - TX_POWER_10 valid for AU915.
  * @return True if successful, false if not.
  */
-bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey);
+bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t tx_power = LORAWAN_DEFAULT_TX_POWER);
 
 /**
  * @brief Initialise LoRaWAN.
- * @param appEUI    OTAA key app EUI.
- * @param deviceEUI OTAA key device EUI.
- * @param appKey    OTAA key app key.
  * @param timer     Timer that will be started once network has been successfully joined.
+ * @param appEUI    OTAA key app EUI.
+ * @param deviceEUI OTAA key device EUI.
+ * @param appKey    OTAA key app key.
+ * @param tx_power  TX power setting. (Defaults to LORAWAN_DEFAULT_TX_POWER). TX_POWER_0 - TX_POWER_10 valid for AU915.
  * @return True if successful, false if not.
  */
-bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, SoftwareTimer *timer);
+bool initLoRaWAN(SoftwareTimer *timer, uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t tx_power = LORAWAN_DEFAULT_TX_POWER);
 
 /**
  * @brief Attempt to join the LoRaWAN network.

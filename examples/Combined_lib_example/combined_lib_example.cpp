@@ -75,7 +75,7 @@ void setup() {
     appTimerInit();
 
     // Init LoRaWAN
-    if (!initLoRaWAN(OTAA_KEY_APP_EUI, OTAA_KEY_DEV_EUI, OTAA_KEY_APP_KEY, &payloadTimer)) {
+    if (!initLoRaWAN(&payloadTimer, OTAA_KEY_APP_EUI, OTAA_KEY_DEV_EUI, OTAA_KEY_APP_KEY)) {
         delay(1000);
         return;
     }

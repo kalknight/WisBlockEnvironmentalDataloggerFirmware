@@ -96,18 +96,18 @@ Replace the keys with those for the individual device as defined on [TTS](../../
 
 At the top of LoRaWAN_functs.h you'll find the LoRaWAN configuration and parameters used in the connection setup.
 Feel free to change any of these as required, baring in mind how they effect the connection performance and power consumption.
-Refer to the LoRaWAN specification for further detail.
 
 ```c++
 static const DeviceClass_t loraClass = CLASS_A;                 /**< Class definition. */
 static const LoRaMacRegion_t loraRegion = LORAMAC_REGION_AU915; /**< Region:AU915. */
 static const lmh_confirm loraConfirm = LMH_UNCONFIRMED_MSG;     /**< Confirm/unconfirm packet definition. */
-
-#define LORAWAN_DATERATE              DR_3        /**< LoRaMac datarates: DR_0 to DR_5*/
-#define LORAWAN_TX_POWER              TX_POWER_10 /**< LoRaMac tx power: TX_POWER_0 to TX_POWER_10 (for AU915)*/
-#define LORAWAN_JOIN_REQUEST_ATTEMPTS 3           /**< Join request reattempts. */
-#define PAYLOAD_BUFFER_SIZE           64          /**< Data payload buffer size. */
+#define LORAWAN_JOIN_TRIALS 3                                   /**< Join request reattempts. */
+#define PAYLOAD_BUFFER_SIZE 64                                  /**< Data payload buffer size. */
 ```
+
+Additionally the TX power can optionally be passed to `initLoRaWAN()`, otherwise it defaults to `LORAWAN_DEFAULT_TX_POWER` = `TX_POWER_0`.
+
+Refer to the LoRaWAN specification for further detail.
 
 ## Troubleshooting the Connection
 
@@ -125,6 +125,6 @@ Try uping the transmission power (`LORAWAN_TX_POWER`), and getting closer closer
 
 The devices are not expecting to receive any downlink messages, and hence currently don't really do anything with them if they were to be received (see `lorawanRXHandler()` in LoRaWAN_functs.cpp). If you'd like to have a back-and-forth connection, you will need to extend the library and implement this in the `lorawanRXHandler()` callback.
 
-Once permanent application modifiable memory is included on the boards (e.g. EEPROM), the devices should begin to store the OTAA credentials instead of completely re-joining the network on reset. It is not good practice to regularly rejoin the network in this fashion as it can clog it up. This isn't too much of any issue at the moment as the devices aren't expected to reset regularly, but if this were to change and/or many more devices were hoping to use the network then it would be advisable. This is why the devices will only make a limited number of attempts (`LORAWAN_JOIN_REQUEST_ATTEMPTS`) to join the network before just stopping until manually reset, as otherwise it would be spamming the network.
+Once permanent application modifiable memory is included on the boards (e.g. EEPROM), the devices should begin to store the OTAA credentials instead of completely re-joining the network on reset. It is not good practice to regularly rejoin the network in this fashion as it can clog it up. This isn't too much of any issue at the moment as the devices aren't expected to reset regularly, but if this were to change and/or many more devices were hoping to use the network then it would be advisable. This is why the devices will only make a limited number of attempts (`LORAWAN_JOIN_TRIALS`) to join the network before just stopping until manually reset, as otherwise it would be spamming the network.
 
 The OTAA keys should be unique for each device (as they are on TTS) anf unfortunately they are currently part of the compilation of the device, which makes flashing many devices a pain. This is not essential going forward, but ideally some sort of compilation tool (or other creative solution like Bluetooth, etc.) could be developed to simiplfy this process.
