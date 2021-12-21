@@ -7,27 +7,27 @@ uint8_t portSchema::encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *
      * The buffsize is increased by the amount of data encoded in each step.
      */
     uint8_t payload_length = start_pos;
-    if (sendBatteryVoltage) {
+    for (uint8_t i = 0; i < sendBatteryVoltage; i++) {
         payload_length = batteryVoltageSchema.encodeData(
             sensor_data->battery_mv.value, sensor_data->battery_mv.is_valid, payload_buffer, payload_length);
     }
-    if (sendTemperature) {
+    for (uint8_t i = 0; i < sendTemperature; i++) {
         payload_length = temperatureSchema.encodeData(sensor_data->temperature.value, sensor_data->temperature.is_valid,
                                                       payload_buffer, payload_length);
     }
-    if (sendRelativeHumidity) {
+    for (uint8_t i = 0; i < sendRelativeHumidity; i++) {
         payload_length = relativeHumiditySchema.encodeData(sensor_data->humidity.value, sensor_data->humidity.is_valid,
                                                            payload_buffer, payload_length);
     }
-    if (sendAirPressure) {
+    for (uint8_t i = 0; i < sendAirPressure; i++) {
         payload_length = airPressureSchema.encodeData(sensor_data->pressure.value, sensor_data->pressure.is_valid,
                                                       payload_buffer, payload_length);
     }
-    if (sendGasResistance) {
+    for (uint8_t i = 0; i < sendGasResistance; i++) {
         payload_length = gasResistanceSchema.encodeData(sensor_data->gas_resist.value, sensor_data->gas_resist.is_valid,
                                                         payload_buffer, payload_length);
     }
-    if (sendLocation) {
+    for (uint8_t i = 0; i < sendLocation; i++) {
         payload_length = locationSchema.encodeData(sensor_data->location.latitude, sensor_data->location.is_valid,
                                                    payload_buffer, payload_length);
         payload_length = locationSchema.encodeData(sensor_data->location.longitude, sensor_data->location.is_valid,
@@ -40,22 +40,22 @@ sensorData portSchema::decodePayloadToSensorData(uint8_t *buffer, uint8_t len, u
     sensorData sensor_data = {};
     uint8_t buff_pos = start_pos;
 
-    if (sendBatteryVoltage && (buff_pos < len)) {
+    for (uint8_t i = 0; i < sendBatteryVoltage && (buff_pos < len); i++) {
         buff_pos = batteryVoltageSchema.decodeData(&sensor_data.battery_mv.value, &sensor_data.battery_mv.is_valid, buffer, buff_pos);
     }
-    if (sendTemperature && (buff_pos < len)) {
+    for (uint8_t i = 0; i < sendTemperature && (buff_pos < len); i++) {
         buff_pos = temperatureSchema.decodeData(&sensor_data.temperature.value, &sensor_data.temperature.is_valid, buffer, buff_pos);
     }
-    if (sendRelativeHumidity && (buff_pos < len)) {
+    for (uint8_t i = 0; i < sendRelativeHumidity && (buff_pos < len); i++) {
         buff_pos = relativeHumiditySchema.decodeData(&sensor_data.humidity.value, &sensor_data.humidity.is_valid, buffer, buff_pos);
     }
-    if (sendAirPressure && (buff_pos < len)) {
+    for (uint8_t i = 0; i < sendAirPressure && (buff_pos < len); i++) {
         buff_pos = airPressureSchema.decodeData(&sensor_data.pressure.value, &sensor_data.pressure.is_valid, buffer, buff_pos);
     }
-    if (sendGasResistance && (buff_pos < len)) {
+    for (uint8_t i = 0; i < sendGasResistance && (buff_pos < len); i++) {
         buff_pos = gasResistanceSchema.decodeData(&sensor_data.gas_resist.value, &sensor_data.gas_resist.is_valid, buffer, buff_pos);
     }
-    if (sendLocation && (buff_pos < len)) {
+    for (uint8_t i = 0; i < sendLocation && (buff_pos < len); i++) {
         buff_pos = locationSchema.decodeData(&sensor_data.location.latitude, &sensor_data.location.is_valid, buffer, buff_pos);
         buff_pos = locationSchema.decodeData(&sensor_data.location.longitude, &sensor_data.location.is_valid, buffer, buff_pos);
     }
