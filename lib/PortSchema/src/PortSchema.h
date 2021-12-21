@@ -17,7 +17,6 @@
 
 /** @brief portSchema describes which sensor data to include in each port and hence the payload. */
 struct portSchema {
-  public:
     uint8_t port_number;
 
     /**< Flags for if the sensors data is included in this port. */
