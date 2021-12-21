@@ -19,15 +19,16 @@
 struct portSchema {
     uint8_t port_number;
 
-    /**< Flags for if the sensors data is included in this port. */
-    bool sendBatteryVoltage;
-    bool sendTemperature;
-    bool sendRelativeHumidity;
-    bool sendAirPressure;
-    bool sendGasResistance;
-    bool sendLocation;
+    /**< Number of sensor data readings of that type included in this port. If == 0 then data from that sensor is not
+     * included at all. */
+    uint8_t sendBatteryVoltage;
+    uint8_t sendTemperature;
+    uint8_t sendRelativeHumidity;
+    uint8_t sendAirPressure;
+    uint8_t sendGasResistance;
+    uint8_t sendLocation;
     /* An example of a new sensor:
-    bool sendNewSensor;
+    uint8_t sendNewSensor;
     */
 
     /**
@@ -82,211 +83,211 @@ portSchema getPort(uint8_t port_number);
 
 const portSchema PORTERROR = {
     __UINT8_MAX__, // port_number
-    false,         // sendBatteryVoltage
-    false,         // sendTemperature
-    false,         // sendRelativeHumidity
-    false,         // sendAirPressure
-    false,         // sendGasResistance
-    false          // sendLocation
+    0,             // sendBatteryVoltage
+    0,             // sendTemperature
+    0,             // sendRelativeHumidity
+    0,             // sendAirPressure
+    0,             // sendGasResistance
+    0              // sendLocation
 };
 
 const portSchema PORT1 = {
-    1,     // port_number
-    true,  // sendBatteryVoltage
-    false, // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    1, // port_number
+    1, // sendBatteryVoltage
+    0, // sendTemperature
+    0, // sendRelativeHumidity
+    0, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 
 const portSchema PORT2 = {
-    2,     // port_number
-    false, // sendBatteryVoltage
-    true,  // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    2, // port_number
+    0, // sendBatteryVoltage
+    1, // sendTemperature
+    0, // sendRelativeHumidity
+    0, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 
 const portSchema PORT3 = {
-    3,     // port_number
-    true,  // sendBatteryVoltage
-    true,  // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    3, // port_number
+    1, // sendBatteryVoltage
+    1, // sendTemperature
+    0, // sendRelativeHumidity
+    0, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 
 const portSchema PORT4 = {
-    4,     // port_number
-    false, // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    4, // port_number
+    0, // sendBatteryVoltage
+    1, // sendTemperature
+    1, // sendRelativeHumidity
+    0, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 
 const portSchema PORT5 = {
-    5,     // port_number
-    true,  // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    5, // port_number
+    1, // sendBatteryVoltage
+    1, // sendTemperature
+    1, // sendRelativeHumidity
+    0, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 
 const portSchema PORT6 = {
-    6,     // port_number
-    false, // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    true,  // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    6, // port_number
+    0, // sendBatteryVoltage
+    1, // sendTemperature
+    1, // sendRelativeHumidity
+    1, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 const portSchema PORT7 = {
-    7,     // port_number
-    true,  // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    true,  // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    7, // port_number
+    1, // sendBatteryVoltage
+    1, // sendTemperature
+    1, // sendRelativeHumidity
+    1, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 
 const portSchema PORT8 = {
-    8,     // port_number
-    false, // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    true,  // sendAirPressure
-    true,  // sendGasResistance
-    false  // sendLocation
+    8, // port_number
+    0, // sendBatteryVoltage
+    1, // sendTemperature
+    1, // sendRelativeHumidity
+    1, // sendAirPressure
+    1, // sendGasResistance
+    0  // sendLocation
 };
 
 const portSchema PORT9 = {
-    9,    // port_number
-    true, // sendBatteryVoltage
-    true, // sendTemperature
-    true, // sendRelativeHumidity
-    true, // sendAirPressure
-    true, // sendGasResistance
-    false // sendLocation
+    9, // port_number
+    1, // sendBatteryVoltage
+    1, // sendTemperature
+    1, // sendRelativeHumidity
+    1, // sendAirPressure
+    1, // sendGasResistance
+    0  // sendLocation
 };
 
 const portSchema PORT50 = {
-    50,    // port_number
-    false, // sendBatteryVoltage
-    false, // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    true   // sendLocation
+    50, // port_number
+    0,  // sendBatteryVoltage
+    0,  // sendTemperature
+    0,  // sendRelativeHumidity
+    0,  // sendAirPressure
+    0,  // sendGasResistance
+    1   // sendLocation
 };
 
 const portSchema PORT51 = {
-    51,    // port_number
-    true,  // sendBatteryVoltage
-    false, // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    true   // sendLocation
+    51, // port_number
+    1,  // sendBatteryVoltage
+    0,  // sendTemperature
+    0,  // sendRelativeHumidity
+    0,  // sendAirPressure
+    0,  // sendGasResistance
+    1   // sendLocation
 };
 
 const portSchema PORT52 = {
-    52,    // port_number
-    false, // sendBatteryVoltage
-    true,  // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    true   // sendLocation
+    52, // port_number
+    0,  // sendBatteryVoltage
+    1,  // sendTemperature
+    0,  // sendRelativeHumidity
+    0,  // sendAirPressure
+    0,  // sendGasResistance
+    1   // sendLocation
 };
 
 const portSchema PORT53 = {
-    53,    // port_number
-    true,  // sendBatteryVoltage
-    true,  // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    true   // sendLocation
+    53, // port_number
+    1,  // sendBatteryVoltage
+    1,  // sendTemperature
+    0,  // sendRelativeHumidity
+    0,  // sendAirPressure
+    0,  // sendGasResistance
+    1   // sendLocation
 };
 
 const portSchema PORT54 = {
-    54,    // port_number
-    false, // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    true   // sendLocation
+    54, // port_number
+    0,  // sendBatteryVoltage
+    1,  // sendTemperature
+    1,  // sendRelativeHumidity
+    0,  // sendAirPressure
+    0,  // sendGasResistance
+    1   // sendLocation
 };
 
 const portSchema PORT55 = {
-    55,    // port_number
-    true,  // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    true   // sendLocation
+    55, // port_number
+    1,  // sendBatteryVoltage
+    1,  // sendTemperature
+    1,  // sendRelativeHumidity
+    0,  // sendAirPressure
+    0,  // sendGasResistance
+    1   // sendLocation
 };
 
 const portSchema PORT56 = {
-    56,    // port_number
-    false, // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    true,  // sendAirPressure
-    false, // sendGasResistance
-    true   // sendLocation
+    56, // port_number
+    0,  // sendBatteryVoltage
+    1,  // sendTemperature
+    1,  // sendRelativeHumidity
+    1,  // sendAirPressure
+    0,  // sendGasResistance
+    1   // sendLocation
 };
 const portSchema PORT57 = {
-    57,    // port_number
-    true,  // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    true,  // sendAirPressure
-    false, // sendGasResistance
-    true   // sendLocation
+    57, // port_number
+    1,  // sendBatteryVoltage
+    1,  // sendTemperature
+    1,  // sendRelativeHumidity
+    1,  // sendAirPressure
+    0,  // sendGasResistance
+    1   // sendLocation
 };
 
 const portSchema PORT58 = {
-    58,    // port_number
-    false, // sendBatteryVoltage
-    true,  // sendTemperature
-    true,  // sendRelativeHumidity
-    true,  // sendAirPressure
-    true,  // sendGasResistance
-    true   // sendLocation
+    58, // port_number
+    0,  // sendBatteryVoltage
+    1,  // sendTemperature
+    1,  // sendRelativeHumidity
+    1,  // sendAirPressure
+    1,  // sendGasResistance
+    1   // sendLocation
 };
 
 const portSchema PORT59 = {
-    59,   // port_number
-    true, // sendBatteryVoltage
-    true, // sendTemperature
-    true, // sendRelativeHumidity
-    true, // sendAirPressure
-    true, // sendGasResistance
-    true  // sendLocation
+    59, // port_number
+    1,  // sendBatteryVoltage
+    1,  // sendTemperature
+    1,  // sendRelativeHumidity
+    1,  // sendAirPressure
+    1,  // sendGasResistance
+    1   // sendLocation
 };
 
 /* An example of a new port:
 const portSchema PORTX = {
-    X,     // port_number
-    false, // sendBatteryVoltage
-    false, // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    X, // port_number
+    0, // sendBatteryVoltage
+    0, // sendTemperature
+    0, // sendRelativeHumidity
+    0, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 */
 

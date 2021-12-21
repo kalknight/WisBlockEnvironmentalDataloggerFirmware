@@ -79,12 +79,12 @@ portSchema &portSchema::operator+(const portSchema &port2) const {
     portSchema combined_port = PORTERROR;
     // clang-format off
     combined_port.port_number = 0;
-    combined_port.sendBatteryVoltage   = (this->sendBatteryVoltage   || port2.sendBatteryVoltage  );
-    combined_port.sendTemperature      = (this->sendTemperature      || port2.sendTemperature     );
-    combined_port.sendRelativeHumidity = (this->sendRelativeHumidity || port2.sendRelativeHumidity);
-    combined_port.sendAirPressure      = (this->sendAirPressure      || port2.sendAirPressure     );
-    combined_port.sendGasResistance    = (this->sendGasResistance    || port2.sendGasResistance   );
-    combined_port.sendLocation         = (this->sendLocation         || port2.sendLocation        );
+    combined_port.sendBatteryVoltage   = (this->sendBatteryVoltage   + port2.sendBatteryVoltage  );
+    combined_port.sendTemperature      = (this->sendTemperature      + port2.sendTemperature     );
+    combined_port.sendRelativeHumidity = (this->sendRelativeHumidity + port2.sendRelativeHumidity);
+    combined_port.sendAirPressure      = (this->sendAirPressure      + port2.sendAirPressure     );
+    combined_port.sendGasResistance    = (this->sendGasResistance    + port2.sendGasResistance   );
+    combined_port.sendLocation         = (this->sendLocation         + port2.sendLocation        );
     // clang-format on
     return combined_port;
 }
