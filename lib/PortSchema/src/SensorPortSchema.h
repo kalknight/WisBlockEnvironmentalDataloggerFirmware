@@ -13,9 +13,9 @@
  * @copyright (c) 2021 Kalina Knight - MIT License
  */
 
-#include <LoRaWan-RAK4630.h> // Click to get library: https://platformio.org/lib/show/6601/SX126x-Arduino
+#include <math.h>
 
-#include "Logging.h" /**< Go here to change the logging level for the entire application. */
+#include "Particle.h"
 
 /**
  * @brief Struct with data from sensors and their validity.
@@ -26,7 +26,7 @@ struct sensorData {
     struct {
         float value;
         bool is_valid;
-    } battery_mv; /**< Battery mV: %. */
+    } battery_mv; /**< Battery mV. */
     struct {
         float value;
         bool is_valid;
@@ -78,11 +78,24 @@ class sensorPortSchema {
     uint8_t encodeData(uint8_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
     uint8_t encodeData(uint16_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
     uint8_t encodeData(uint32_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+
+    uint8_t decodeData(int *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
+    uint8_t decodeData(float *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
+    uint8_t decodeData(uint8_t *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
+    uint8_t decodeData(uint16_t *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
+    uint8_t decodeData(uint32_t *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // SCHEMA DEFINITIONS: See readme for definitions in tabular format.
+
+static const sensorPortSchema timestampSchema = { // units: s
+    .n_bytes = 4,
+    .n_values = 1,
+    .scale_factor = 1,
+    .is_signed = false
+};
 
 static const sensorPortSchema batteryVoltageSchema = { // units: mV
     .n_bytes = 2,
