@@ -217,6 +217,9 @@ struct portSchema {
     bool sendAirPressure;
     bool sendGasResistance;
     bool sendLocation;
+    /* An example of a new sensor:
+    bool sendNewSensor;
+    */
 
     /**
      * @brief Encodes the given sensor data into the payload according to the port's schema.
@@ -227,6 +230,34 @@ struct portSchema {
      * @return Total length of data encoded to payload_buffer.
      */
     uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer, uint8_t start_pos = 0);
+
+    /**
+     * @brief Decodes the given payload into the sensor data according to the port's schema.
+     * Calls sensorPortSchema::decodeData for each sensor.
+     * @param buffer Payload buffer to be decoded.
+     * @param len Length of payload buffer.
+     * @param start_pos Start decoding data at this byte. Defaults to 0.
+     * @return Decoded sensor data.
+     */
+    sensorData decodePayloadToSensorData(uint8_t *buffer, uint8_t len, uint8_t start_pos = 0);
+
+    /**
+     * @brief Compares for full equivalence between two port objects.
+     *
+     * @param port2 Second port that this port is compared to.
+     * @return True if they're equivalent, false if not.
+     */
+    bool operator==(const portSchema &port2);
+
+    /**
+     * @brief Combines two ports into separate port.
+     * The port number is set to 0, and the send sensor flags are ||'ed.
+     * Useful for sensor initiatlisation if using the port definition for this purpose.
+     *
+     * @param port2 Second port that this port is combined with.
+     * @return Another port schema object that combines the given ports.
+     */
+    portSchema &operator+(const portSchema &port2) const;
 };
 ```
 
@@ -259,19 +290,43 @@ class sensorPortSchema {
                              then divide by scale_factor to decode. */
     bool is_signed;     /**< Value has a sign and hence can be negative. */
 
-    ...
     /**
      * @brief Byte encodes the given sensor data into the payload according to the sensor port schema.
-     * Calls a template function defined in PortSchema.cpp that can take in sensor_data of various types.
-     * ...
+     * @details Calls a template function defined in PortSchema.cpp that can take in sensor_data of various types.
+     * Feel free to add a new sensor_data type overload of encodeData() if necessary.
+     * If the sensor data is not valid, for whatever reason, a value close to max (for the number of bytes) will be
+     * encoded instead. The decoder then knows to ignore the data as it is invalid. If the data is invalid a segment of
+     * 0x7F7F7F7F (signed) or 0xFFFFFFFF (unsigned) will be encoded and sent instead of the invalid data. E.g. For an
+     * invalid 2 byte signed the value will be 0x7f7f.
      * @param sensor_data Sensor data to encode (valid data types: int, float, uint8_t, uint16_t, uint32_t).
      * @param valid Validity of given sensor data.
      * @param payload_buffer Payload buffer for data to be written into.
      * @param current_buffer_len Length of current data in the buffer, used to avoid overwriting data.
      * @return Total length of data encoded to payload_buffer.
      */
-    uint8_t encodeData(<type> sensor_data, bool valid, uint8_t *payload_buffer) const;
+    uint8_t encodeData(int sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+    uint8_t encodeData(float sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+    uint8_t encodeData(uint8_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+    uint8_t encodeData(uint16_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
+    uint8_t encodeData(uint32_t sensor_data, bool valid, uint8_t *payload_buffer, uint8_t current_buffer_len) const;
 
+    /**
+     * @brief Byte decodes the given buffer into the sensor data according to the given sensor port schema.
+     * @details Calls a template function defined in PortSchema.cpp that can return sensor_data of various types.
+     * Feel free to add a new sensor_data type overload of decodeData() if necessary.
+     * If the sensor data is not valid, for whatever reason, the valid flag will be set to false and no data will be
+     * decoded to sensor_data.
+     * @param sensor_data Resulting decoded sensor data (valid data types: int, float, uint8_t, uint16_t, uint32_t).
+     * @param valid Validity of sensor data.
+     * @param buffer Buffer that data will be decoded from.
+     * @param buf_pos Start decoding from this byte, used to avoid header data.
+     * @return Total length of data decoded from buffer.
+     */
+    uint8_t decodeData(int *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
+    uint8_t decodeData(float *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
+    uint8_t decodeData(uint8_t *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
+    uint8_t decodeData(uint16_t *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
+    uint8_t decodeData(uint32_t *sensor_data, bool *valid, uint8_t *buffer, uint8_t buff_pos) const;
 };
 ```
 

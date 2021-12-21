@@ -17,7 +17,6 @@
 
 /** @brief portSchema describes which sensor data to include in each port and hence the payload. */
 struct portSchema {
-  public:
     uint8_t port_number;
 
     /**< Flags for if the sensors data is included in this port. */
@@ -41,13 +40,40 @@ struct portSchema {
      */
     uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer, uint8_t start_pos = 0);
 
-    sensorData decodeSensorDataToPayload(uint8_t *buffer, uint8_t len, uint8_t start_pos = 0);
+    /**
+     * @brief Decodes the given payload into the sensor data according to the port's schema.
+     * Calls sensorPortSchema::decodeData for each sensor.
+     * @param buffer Payload buffer to be decoded.
+     * @param len Length of payload buffer.
+     * @param start_pos Start decoding data at this byte. Defaults to 0.
+     * @return Decoded sensor data.
+     */
+    sensorData decodePayloadToSensorData(uint8_t *buffer, uint8_t len, uint8_t start_pos = 0);
 
+    /**
+     * @brief Compares for full equivalence between two port objects.
+     *
+     * @param port2 Second port that this port is compared to.
+     * @return True if they're equivalent, false if not.
+     */
     bool operator==(const portSchema &port2);
 
+    /**
+     * @brief Combines two ports into separate port.
+     * The port number is set to 0, and the send sensor flags are ||'ed.
+     * Useful for sensor initiatlisation if using the port definition for this purpose.
+     *
+     * @param port2 Second port that this port is combined with.
+     * @return Another port schema object that combines the given ports.
+     */
     portSchema &operator+(const portSchema &port2) const;
 };
 
+/**
+ * @brief Get the Port object for the given port number.
+ * @param port_number
+ * @return Returns the portSchema.
+ */
 portSchema getPort(uint8_t port_number);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,13 +81,13 @@ portSchema getPort(uint8_t port_number);
 // SCHEMA DEFINITIONS: See readme for definitions in tabular format.
 
 const portSchema PORTERROR = {
-    0,     // port_number
-    false, // sendBatteryVoltage
-    false, // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    __UINT8_MAX__, // port_number
+    false,         // sendBatteryVoltage
+    false,         // sendTemperature
+    false,         // sendRelativeHumidity
+    false,         // sendAirPressure
+    false,         // sendGasResistance
+    false          // sendLocation
 };
 
 const portSchema PORT1 = {
