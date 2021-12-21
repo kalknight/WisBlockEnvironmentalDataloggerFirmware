@@ -9,8 +9,9 @@
  * @param sensor_data Sensor data to encode. This template allows the type of sensor_data to be flexible (to a point).
  * @param valid Validity of given sensor data.
  * @param payload_buffer LoRaWAN payload with buffer for data to be written into.
+ * @param buf_pos Start encoding from this byte.
  * @param sensor_schema Sensor port schema that determines how the data is encoded.
- * @return New total length of data encoded to payload_buffer.
+ * @return New total length of data encoded to payload_buffer - includes buf_pos.
  */
 template <typename T>
 uint8_t encodeDataWithSchema(T sensor_data, bool valid, uint8_t *payload_buffer, uint8_t buf_pos, const sensorPortSchema *sensor_schema) {
@@ -83,16 +84,16 @@ uint8_t sensorPortSchema::encodeData(float sensor_data, bool valid, uint8_t *pay
 }
 
 /**
- * @brief Byte encodes the given sensor data into the payload according to the given sensor port schema.
- * If the sensor data is not valid, for whatever reason, a value close to max (for the number of bytes) will be
- * encoded instead. The decoder then knows to ignore the data as it is invalid. If the data is invalid a segment of
- * 0x7F7F7F7F (signed) or 0xFFFFFFFF (unsigned) will be encoded and sent instead of the invalid data. E.g. For an
- * invalid 2 byte signed the value will be 0x7f7f.
- * @param sensor_data Sensor data to encode. This template allows the type of sensor_data to be flexible (to a point).
- * @param valid Validity of given sensor data.
- * @param buffer LoRaWAN payload with buffer for data to be written into.
- * @param sensor_schema Sensor port schema that determines how the data is encoded.
- * @return New total length of data encoded to buffer.
+ * @brief Byte decodes the given buffer into the sensor data according to the given sensor port schema.
+ * If the sensor data is not valid, for whatever reason, the valid flag will be set to false and no data will be decoded
+ * to sensor_data.
+ * @param sensor_data Resulting decoded sensor data. This template allows the type of sensor_data to be flexible (to a
+ * point).
+ * @param valid Validity of the decoded sensor data.
+ * @param buffer Buffer that data will be decoded from.
+ * @param buf_pos Start decoding from this byte.
+ * @param sensor_schema Sensor port schema that determines how the data is decoded.
+ * @return New total length of data decoded from buffer - includes buf_pos.
  */
 template <typename T>
 uint8_t decodeDataWithSchema(T *sensor_data, bool *valid, uint8_t *buffer, uint8_t buf_pos, const sensorPortSchema *sensor_schema) {
