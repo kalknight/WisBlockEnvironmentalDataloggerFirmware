@@ -36,7 +36,7 @@ uint8_t portSchema::encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *
     return payload_length;
 }
 
-sensorData portSchema::decodeSensorDataToPayload(uint8_t *buffer, uint8_t len, uint8_t start_pos) {
+sensorData portSchema::decodePayloadToSensorData(uint8_t *buffer, uint8_t len, uint8_t start_pos) {
     sensorData sensor_data = {};
     uint8_t buff_pos = start_pos;
 
@@ -78,6 +78,7 @@ bool portSchema::operator==(const portSchema &port2) {
 portSchema &portSchema::operator+(const portSchema &port2) const {
     portSchema combined_port = PORTERROR;
     // clang-format off
+    combined_port.port_number = 0;
     combined_port.sendBatteryVoltage   = (this->sendBatteryVoltage   || port2.sendBatteryVoltage  );
     combined_port.sendTemperature      = (this->sendTemperature      || port2.sendTemperature     );
     combined_port.sendRelativeHumidity = (this->sendRelativeHumidity || port2.sendRelativeHumidity);
