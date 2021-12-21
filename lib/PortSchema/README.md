@@ -110,29 +110,29 @@ The schema has been designed with a couple of rules:
 
 ### Port Definitions
 
-Currently 19 ports have been designed and assigned a port number (PN) (see [portSchema](#portschema) for how they're defined in code):
+Currently 19 ports have been designed and assigned a port number (PN) (see [portSchema](#portschema) for how they're defined in code). They're all just sending a single sensor reading of each type for this example:
 
-| Port Number (PN) |  Battery Voltage   |    Temperature     | Relative Humidity  |    Air Pressure    |   Gas Resistance   |      Location      | Total Length |
-| :--------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------------: | :----------: |
-|        1         | :heavy_check_mark: |         -          |         -          |         -          |         -          |         -          |      2       |
-|        2         |         -          | :heavy_check_mark: |         -          |         -          |         -          |         -          |      2       |
-|        3         | :heavy_check_mark: | :heavy_check_mark: |         -          |         -          |         -          |         -          |      4       |
-|        4         |         -          | :heavy_check_mark: | :heavy_check_mark: |         -          |         -          |         -          |      3       |
-|        5         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         -          |         -          |         -          |      5       |
-|        6         |         -          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         -          |         -          |      7       |
-|        7         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         -          |         -          |      9       |
-|        8         |         -          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         -          |      11      |
-|        9         | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         -          |      13      |
-|        50        |         -          |         -          |         -          |         -          |         -          | :heavy_check_mark: |      8       |
-|        51        | :heavy_check_mark: |         -          |         -          |         -          |         -          | :heavy_check_mark: |      10      |
-|        52        |         -          | :heavy_check_mark: |         -          |         -          |         -          | :heavy_check_mark: |      10      |
-|        53        | :heavy_check_mark: | :heavy_check_mark: |         -          |         -          |         -          | :heavy_check_mark: |      12      |
-|        54        |         -          | :heavy_check_mark: | :heavy_check_mark: |         -          |         -          | :heavy_check_mark: |      11      |
-|        55        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         -          |         -          | :heavy_check_mark: |      13      |
-|        56        |         -          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         -          | :heavy_check_mark: |      15      |
-|        57        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |         -          | :heavy_check_mark: |      17      |
-|        58        |         -          | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |      19      |
-|        59        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |      21      |
+| Port Number (PN) | Battery Voltage | Temperature | Relative Humidity | Air Pressure | Gas Resistance | Location | Total Length |
+| :--------------: | :-------------: | :---------: | :---------------: | :----------: | :------------: | :------: | :----------: |
+|        1         |        1        |      -      |         -         |      -       |       -        |    -     |      2       |
+|        2         |        -        |      1      |         -         |      -       |       -        |    -     |      2       |
+|        3         |        1        |      1      |         -         |      -       |       -        |    -     |      4       |
+|        4         |        -        |      1      |         1         |      -       |       -        |    -     |      3       |
+|        5         |        1        |      1      |         1         |      -       |       -        |    -     |      5       |
+|        6         |        -        |      1      |         1         |      1       |       -        |    -     |      7       |
+|        7         |        1        |      1      |         1         |      1       |       -        |    -     |      9       |
+|        8         |        -        |      1      |         1         |      1       |       1        |    -     |      11      |
+|        9         |        1        |      1      |         1         |      1       |       1        |    -     |      13      |
+|        50        |        -        |      -      |         -         |      -       |       -        |    1     |      8       |
+|        51        |        1        |      -      |         -         |      -       |       -        |    1     |      10      |
+|        52        |        -        |      1      |         -         |      -       |       -        |    1     |      10      |
+|        53        |        1        |      1      |         -         |      -       |       -        |    1     |      12      |
+|        54        |        -        |      1      |         1         |      -       |       -        |    1     |      11      |
+|        55        |        1        |      1      |         1         |      -       |       -        |    1     |      13      |
+|        56        |        -        |      1      |         1         |      1       |       -        |    1     |      15      |
+|        57        |        1        |      1      |         1         |      1       |       -        |    1     |      17      |
+|        58        |        -        |      1      |         1         |      1       |       1        |    1     |      19      |
+|        59        |        1        |      1      |         1         |      1       |       1        |    1     |      21      |
 
 These have been designed with the assumption that it is unlikely for humidity data to be useful without temperature, for air pressure to be useful without humidity and temperature, etc. If this is not the case, if more ports are designed, and/or if [new sensors are added](#new-port-or-sensor-schema-instructions) then try to fit them into this existing port schema or mimic it in a way that is logical and extendable.
 
@@ -163,31 +163,47 @@ The encoding of each sensor - if included in the payload for that port number - 
 
 Some examples of what the payload for different ports looks like based on the port and sensor schema's defined above.
 
-> e.g. PN = 5
+> _e.g. PN = 5_
+>
+> |       Byte 0        |       Byte 1        |     Byte 2      |     Byte 3      |  Byte 4  |
+> | :-----------------: | :-----------------: | :-------------: | :-------------: | :------: |
+> | Battery Voltage MSB | Battery Voltage LSB | Temperature MSB | Temperature LSB | Humidity |
 
-|       Byte 0        |       Byte 1        |     Byte 2      |     Byte 3      |  Byte 4  |
-| :-----------------: | :-----------------: | :-------------: | :-------------: | :------: |
-| Battery Voltage MSB | Battery Voltage LSB | Temperature MSB | Temperature LSB | Humidity |
+> _e.g. PN = 8_
+>
+> |     Byte 0      |     Byte 1      |  Byte 2  |    Byte 3    |  Byte 4  |  Byte 5  |    Byte 6    |
+> | :-------------: | :-------------: | :------: | :----------: | :------: | :------: | :----------: |
+> | Temperature MSB | Temperature LSB | Humidity | Pressure MSB | Pressure | Pressure | Pressure LSB |
+>
+> |     Byte 7      |   Byte 8    |   Byte 9    |     Byte 10     |
+> | :-------------: | :---------: | :---------: | :-------------: |
+> | Gas Resist. MSB | Gas Resist. | Gas Resist. | Gas Resist. LSB |
 
-> e.g. PN = 8
+> _e.g. PN = 53_
+>
+> |       Byte 0        |       Byte 1        |     Byte 2      |     Byte 3      |
+> | :-----------------: | :-----------------: | :-------------: | :-------------: |
+> | Battery Voltage MSB | Battery Voltage LSB | Temperature MSB | Temperature LSB |
+>
+> |    Byte 4    |  Byte 5  |  Byte 6  |    Byte 7    |    Byte 8     |  Byte 9   |  Byte 10  |    Byte 11    |
+> | :----------: | :------: | :------: | :----------: | :-----------: | :-------: | :-------: | :-----------: |
+> | Latitude MSB | Latitude | Latitude | Latitude LSB | Longitude MSB | Longitude | Longitude | Longitude LSB |
 
-|     Byte 0      |     Byte 1      |  Byte 2  |    Byte 3    |  Byte 4  |  Byte 5  |    Byte 6    |
-| :-------------: | :-------------: | :------: | :----------: | :------: | :------: | :----------: |
-| Temperature MSB | Temperature LSB | Humidity | Pressure MSB | Pressure | Pressure | Pressure LSB |
+If multiple readings are to be sent for a sensor then they're all encoded before moving to the next:
 
-|     Byte 7      |   Byte 8    |   Byte 9    |     Byte 10     |
-| :-------------: | :---------: | :---------: | :-------------: |
-| Gas Resist. MSB | Gas Resist. | Gas Resist. | Gas Resist. LSB |
-
-> e.g. PN = 53
-
-|       Byte 0        |       Byte 1        |     Byte 2      |     Byte 3      |
-| :-----------------: | :-----------------: | :-------------: | :-------------: |
-| Battery Voltage MSB | Battery Voltage LSB | Temperature MSB | Temperature LSB |
-
-|    Byte 4    |  Byte 5  |  Byte 6  |    Byte 7    |    Byte 8     |  Byte 9   |  Byte 10  |    Byte 11    |
-| :----------: | :------: | :------: | :----------: | :-----------: | :-------: | :-------: | :-----------: |
-| Latitude MSB | Latitude | Latitude | Latitude LSB | Longitude MSB | Longitude | Longitude | Longitude LSB |
+> _e.g. PN = X_
+>
+> | Port Number (PN) | Battery Voltage | Temperature | Relative Humidity | Air Pressure | Gas Resistance | Location | Total Length |
+> | :--------------: | :-------------: | :---------: | :---------------: | :----------: | :------------: | :------: | :----------: |
+> |        X         |        1        |      3      |         1         |      -       |       -        |    -     |      9       |
+>
+> |       Byte 0        |       Byte 1        |      Byte 2       |      Byte 3       |
+> | :-----------------: | :-----------------: | :---------------: | :---------------: |
+> | Battery Voltage MSB | Battery Voltage LSB | Temperature 0 MSB | Temperature 0 LSB |
+>
+> |      Byte 4       |      Byte 5       |      Byte 6       |      Byte 7       |  Byte 8  |
+> | :---------------: | :---------------: | :---------------: | :---------------: | :------: |
+> | Temperature 1 MSB | Temperature 1 LSB | Temperature 2 MSB | Temperature 2 LSB | Humidity |
 
 #### Invalid Sensor Data
 
@@ -210,15 +226,16 @@ portSchema is a struct with the port number and series of flags that define whic
 struct portSchema {
     uint8_t port_number;
 
-    /**< Flags for if the sensors data is included in this port. */
-    bool sendBatteryVoltage;
-    bool sendTemperature;
-    bool sendRelativeHumidity;
-    bool sendAirPressure;
-    bool sendGasResistance;
-    bool sendLocation;
+    /**< Number of sensor data readings of that type included in this port. If == 0 then data from that sensor is not
+     * included at all. */
+    uint8_t sendBatteryVoltage;
+    uint8_t sendTemperature;
+    uint8_t sendRelativeHumidity;
+    uint8_t sendAirPressure;
+    uint8_t sendGasResistance;
+    uint8_t sendLocation;
     /* An example of a new sensor:
-    bool sendNewSensor;
+    uint8_t sendNewSensor;
     */
 
     /**
