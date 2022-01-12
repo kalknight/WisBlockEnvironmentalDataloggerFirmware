@@ -15,7 +15,9 @@
 
 #include <math.h>
 
-#include "Particle.h"
+#include "Arduino.h"
+
+#define MAX_SENSOR_VALUES 10
 
 /**
  * @brief Struct with data from sensors and their validity.
@@ -26,28 +28,28 @@ struct sensorData {
     struct {
         float value;
         bool is_valid;
-    } battery_mv; /**< Battery mV. */
+    } battery_mv[MAX_SENSOR_VALUES]; /**< Battery mV. */
     struct {
         float value;
         bool is_valid;
-    } temperature; /**< Temperature: degrees C. */
+    } temperature[MAX_SENSOR_VALUES]; /**< Temperature: degrees C. */
     struct {
         float value;
         bool is_valid;
-    } humidity; /**< Relative humidity: %). */
+    } humidity[MAX_SENSOR_VALUES]; /**< Relative humidity: %). */
     struct {
         uint32_t value;
         bool is_valid;
-    } pressure; /**< Air pressure: Pa. */
+    } pressure[MAX_SENSOR_VALUES]; /**< Air pressure: Pa. */
     struct {
         uint32_t value;
         bool is_valid;
-    } gas_resist; /**< Gas Resistance doesn't have units. */
+    } gas_resist[MAX_SENSOR_VALUES]; /**< Gas Resistance doesn't have units. */
     struct {
         float latitude;
         float longitude;
         bool is_valid;
-    } location; /**< Location latitude & longitude in degrees. */
+    } location[MAX_SENSOR_VALUES]; /**< Location latitude & longitude in degrees. */
 };
 
 /** @brief sensorPortSchema describes how each sensors data should be encoded. */

@@ -67,7 +67,7 @@ struct portSchema {
      * @param port2 Second port that this port is combined with.
      * @return Another port schema object that combines the given ports.
      */
-    portSchema &operator+(const portSchema &port2) const;
+    portSchema operator+(const portSchema &port2) const;
 };
 
 /**
