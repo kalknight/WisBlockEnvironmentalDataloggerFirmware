@@ -51,6 +51,14 @@ struct sensorData {
         bool is_valid;
     } location[MAX_SENSOR_VALUES]; /**< Location latitude & longitude in degrees. */
 
+    /**
+     * @brief Formats the sensor data for printing into the given buffer.
+     * @param buffer Buffer data is formatted into.
+     * @param buffer_len Length of given buffer.
+     * @param print_valid_only (Default = true) Print only valid data to buffer if true. Print all data to buffer if
+     * false.
+     * @return True if able to fit into the buffer, false if string was concatenated.
+     */
     bool printable(char *buffer, int buffer_len, bool print_valid_only = true);
 };
 
