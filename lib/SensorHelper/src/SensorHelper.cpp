@@ -80,51 +80,55 @@ bool initSensors(const portSchema *port_settings, bool useRAK1901, bool useRAK19
 sensorData getSensorData(const portSchema *port_settings) {
     sensorData data = {};
 
-    if (port_settings->sendBatteryVoltage) {
-        data.battery_mv.value = batLvl.getSensorMV();
-        data.battery_mv.is_valid = true;
+    for (uint8_t i = 0; (i < port_settings->sendBatteryVoltage); i++) {
+        data.battery_mv[i].value = batLvl.getSensorMV();
+        data.battery_mv[i].is_valid = true;
     }
 
-    if (port_settings->sendTemperature || port_settings->sendRelativeHumidity || port_settings->sendAirPressure ||
-        port_settings->sendGasResistance) {
+    uint8_t max_readings_required = max(max(port_settings->sendTemperature, port_settings->sendRelativeHumidity),
+                                        max(port_settings->sendAirPressure, port_settings->sendGasResistance));
+
+    for (uint8_t i = 0; (i < max_readings_required); i++) {
         if (USERAK1906) {
-            if (enviroSensor.dataReady()) {
-                if (port_settings->sendTemperature) {
-                    data.temperature.value = enviroSensor.getTemperature();
-                    data.temperature.is_valid = true;
-                }
-                if (port_settings->sendRelativeHumidity) {
-                    data.humidity.value = enviroSensor.getHumidity();
-                    data.humidity.is_valid = true;
-                }
-                if (port_settings->sendAirPressure) {
-                    data.pressure.value = enviroSensor.getPressure();
-                    data.pressure.is_valid = true;
-                }
-                if (port_settings->sendGasResistance) {
-                    data.gas_resist.value = enviroSensor.getGasResistance();
-                    data.gas_resist.is_valid = true;
-                }
+            if (!enviroSensor.dataReady()) {
+                break;
+            }
+            if (i < port_settings->sendTemperature) {
+                data.temperature[i].value = enviroSensor.getTemperature();
+                data.temperature[i].is_valid = true;
+            }
+            if (i < port_settings->sendRelativeHumidity) {
+                data.humidity[i].value = enviroSensor.getHumidity();
+                data.humidity[i].is_valid = true;
+            }
+            if (i < port_settings->sendAirPressure) {
+                data.pressure[i].value = enviroSensor.getPressure();
+                data.pressure[i].is_valid = true;
+            }
+            if (i < port_settings->sendGasResistance) {
+                data.gas_resist[i].value = enviroSensor.getGasResistance();
+                data.gas_resist[i].is_valid = true;
             }
         } else if (USERAK1901) {
-            if (tempHumiSensor.dataReady()) {
-                if (port_settings->sendTemperature) {
-                    data.temperature.value = tempHumiSensor.getTemperature();
-                    data.temperature.is_valid = true;
-                }
-                if (port_settings->sendRelativeHumidity) {
-                    data.humidity.value = tempHumiSensor.getHumidity();
-                    data.humidity.is_valid = true;
-                }
+            if (!tempHumiSensor.dataReady()) {
+                break;
+            }
+            if (i < port_settings->sendTemperature) {
+                data.temperature[i].value = tempHumiSensor.getTemperature();
+                data.temperature[i].is_valid = true;
+            }
+            if (i < port_settings->sendRelativeHumidity) {
+                data.humidity[i].value = tempHumiSensor.getHumidity();
+                data.humidity[i].is_valid = true;
             }
         }
     }
 
-    // if (port_settings->sendLocation) {
+    // for (uint8_t i = 0; (i < port_settings->sendLocation); i++) {
     //     if (valid gps data) {
-    //         data.location.latitude = gps.getLatitude();
-    //         data.location.longitude = gps.getLongitude();
-    //         data.location.is_valid = true;
+    //         data.location[i].latitude = gps.getLatitude();
+    //         data.location[i].longitude = gps.getLongitude();
+    //         data.location[i].is_valid = true;
     //     }
     // }
 
