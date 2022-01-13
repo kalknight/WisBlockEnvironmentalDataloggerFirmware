@@ -50,6 +50,8 @@ struct sensorData {
         float longitude;
         bool is_valid;
     } location[MAX_SENSOR_VALUES]; /**< Location latitude & longitude in degrees. */
+
+    bool printable(char *buffer, int buffer_len, bool print_valid_only = true);
 };
 
 /** @brief sensorPortSchema describes how each sensors data should be encoded. */
