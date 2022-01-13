@@ -76,9 +76,10 @@ void loop() {
     // get the sensor data
     sensor_data = getSensorData(&payload_port);
 
-    log(LOG_LEVEL::INFO, "b: %.2f %% | t: %.2f C | h: %.2f %% | p: %lu Pa | g: %lu | l: %.5f, %.5f",
-        sensor_data.battery_mv.value, sensor_data.temperature.value, sensor_data.humidity.value, sensor_data.pressure.value,
-        sensor_data.gas_resist.value, sensor_data.location.latitude, sensor_data.location.longitude);
+    char log_sensor_data[MAX_LOG_LENGTH] = {};
+    sensor_data.printable(log_sensor_data, MAX_LOG_LENGTH);
+
+    log(LOG_LEVEL::INFO, "%s", log_sensor_data);
 }
 ```
 
@@ -151,3 +152,7 @@ All of the sensor readings have been set up in their blocking/one-shot modes, if
 The examples provided assume that the same port number will be used for the entire program, however it is simple enough to change which port is used to send data within the application; just be sure to initialise all of the sensors that will be required by the program. An simple example of this may be only sending the battery voltage every hour or day, instead of every payload, as it is really not expected to change very often.
 
 The [Port Definitions table](../PortSchema/#port-definitions) shows that location data can be encoded but the code to operate and read a location sensor does not exist in this library. If you go to SensorHelper.h & .cpp there are some commented out lines that show a pseudocode style example. The encoding of the location data is included to show an example of encoding a mulit-value data point; other examples of multi-value data are inertial data, colour (RGB), etc.
+
+## Version 0.2
+
+- Upgraded getSensorData to match PortSchema library that now allows multiple of each sensor type.
