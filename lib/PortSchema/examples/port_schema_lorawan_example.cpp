@@ -4,8 +4,8 @@
  * @brief An example of using the Port Schema library with LoRaWAN.
  * This example collects and sends fake sensor data.
  *
- * @version 0.1
- * @date 2021-08-24
+ * @version 0.2
+ * @date 2022-01-13
  *
  * @copyright (c) 2021 Kalina Knight - MIT License
  */
@@ -28,8 +28,7 @@ portSchema port_list[PORT_LIST_LENGTH] = {
 };
 uint8_t p;
 
-// fill with fake data, making sure to set the validity flag to true
-sensorData sensor_data = { 1, true, 2, true, 3, true, 4, true, 5, true, 6, 7, true };
+sensorData sensor_data = {};
 
 // Sensor reading interval in [ms] = 30 seconds.
 const int encoding_interval = 30000;
@@ -51,6 +50,14 @@ void setup() {
         "\n======================================"
         "\nWelcome to Port Schema LoRaWAN Example"
         "\n======================================");
+
+    // fill with fake data, making sure to set the validity flag to true
+    sensor_data.battery_mv[0] = { 1, true };
+    sensor_data.temperature[0] = { 2, true };
+    sensor_data.humidity[0] = { 3, true };
+    sensor_data.pressure[0] = { 4, true };
+    sensor_data.gas_resist[0] = { 5, true };
+    sensor_data.location[0] = { 6, 7, true };
 
     // Init LoRaWAN
     if (!initLoRaWAN(OTAA_KEY_APP_EUI, OTAA_KEY_DEV_EUI, OTAA_KEY_APP_KEY)) {
@@ -75,9 +82,9 @@ void loop() {
             // log sensor data
             log(LOG_LEVEL::INFO,
                 "Sensor Data: {b: %.2f mV | t: %.2f C | h: %.2f %% | p: %lu Pa | g: %lu | l: %.5f, %.5f}",
-                sensor_data.battery_mv.value, sensor_data.temperature.value, sensor_data.humidity.value,
-                sensor_data.pressure.value, sensor_data.gas_resist.value, sensor_data.location.latitude,
-                sensor_data.location.longitude);
+                sensor_data.battery_mv[0].value, sensor_data.temperature[0].value, sensor_data.humidity[0].value,
+                sensor_data.pressure[0].value, sensor_data.gas_resist[0].value, sensor_data.location[0].latitude,
+                sensor_data.location[0].longitude);
         } else if (p >= PORT_LIST_LENGTH) {
             p = 0;
         }

@@ -45,8 +45,7 @@ portSchema port_list[PORT_LIST_LENGTH] = {
 };
 uint8_t p;
 
-// fill with fake data, making sure to set the validity flag to true
-sensorData sensor_data = { 1, true, 2, true, 3, true, 4, true, 5, true, 6, 7, true };
+sensorData sensor_data = {};
 
 // Sensor reading interval in [ms] = 2 seconds.
 const int encoding_interval = 2000;
@@ -61,10 +60,20 @@ void setup() {
     // initialise the logging module - function does nothing if APP_LOG_LEVEL in Logging.h = NONE
     initLogging();
 
+
+    // fill with fake data, making sure to set the validity flag to true
+    sensor_data.battery_mv[0] = { 1, true };
+    sensor_data.temperature[0] = { 2, true };
+    sensor_data.humidity[0] = { 3, true };
+    sensor_data.pressure[0] = { 4, true };
+    sensor_data.gas_resist[0] = { 5, true };
+    sensor_data.location[0] = { 6, 7, true };
+
     // log sensor data
     log(LOG_LEVEL::INFO, "Sensor Data: {b: %.2f mV | t: %.2f C | h: %.2f %% | p: %lu Pa | g: %lu | l: %.5f, %.5f}",
-        sensor_data.battery_mv.value, sensor_data.temperature.value, sensor_data.humidity.value, sensor_data.pressure.value,
-        sensor_data.gas_resist.value, sensor_data.location.latitude, sensor_data.location.longitude);
+        sensor_data.battery_mv[0].value, sensor_data.temperature[0].value, sensor_data.humidity[0].value,
+        sensor_data.pressure[0].value, sensor_data.gas_resist[0].value, sensor_data.location[0].latitude,
+        sensor_data.location[0].longitude);
 
     p = 0;
 }
@@ -153,7 +162,7 @@ The encoding of each sensor - if included in the payload for that port number - 
 
 <sub><sup>$</sup> The order is listed here but in code is defined in the **port** encoding function - not the sensor.</sub>
 
-<sub><sup>#</sup> The total bytes assigned to the sensor data are split equally amoungst the number of values it needs to represent</sub>
+<sub><sup>#</sup> The total bytes assigned to the sensor data are split equally amongst the number of values it needs to represent</sub>
 
 <sub><sup>^</sup> Only integer data can be encoded so the power is the number of decimal places sent with the data (10<sup>dp</sup>)- the rest of the precision is discarded</sub>
 
@@ -282,13 +291,13 @@ To define a port, instantiate the portSchema struct with the port number and fla
 
 ```c++
 const portSchema PORT1 = {
-    1,     // port_number
-    true,  // sendBatteryVoltage
-    false, // sendTemperature
-    false, // sendRelativeHumidity
-    false, // sendAirPressure
-    false, // sendGasResistance
-    false  // sendLocation
+    1, // port_number
+    1, // sendBatteryVoltage
+    0, // sendTemperature
+    0, // sendRelativeHumidity
+    0, // sendAirPressure
+    0, // sendGasResistance
+    0  // sendLocation
 };
 ```
 
@@ -371,7 +380,7 @@ To add a new sensor, it is best practice to define a new port that includes the 
    struct {
        float value;
        bool is_valid;
-   } new_sensor;
+   } new_sensor[MAX_SENSOR_VALUES];
    ...
    ```
 
@@ -385,3 +394,9 @@ You should also update the table(s) above with the new port/sensor schema.
 ## Suggested Next Steps
 
 Obivously the port & sensor schema's have been set up around sensor data, however with a bit of creativity they can also easily be adapted to send other data that makes sense to be sent regularly/accompany sensor data e.g. if an RTC was added to the devices then a timestamp could be added to the schema, assigned a port number and included in the payload; or likewise if a _short_ string (not really something lora is good at), or ping of some sort needs to be sent it, too could be added to the schema, assigned a port number and included in the payload. Either way the port number that is sent with every payload should be used as a tool and not just a wasted byte of data.
+
+## Version 0.2
+
+- Upgraded port schema to handle multiple of each sensor type.
+- Changed sensorData such that each sensor struct is now an array of `MAX_SENSOR_VALUES` length.
+- Added `bool sensorData::printable(...)` member function to format a printable version of the sensor data.

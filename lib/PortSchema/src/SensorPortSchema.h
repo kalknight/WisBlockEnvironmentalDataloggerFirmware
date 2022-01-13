@@ -7,8 +7,8 @@
  * @brief Sensor port schema definitions as descibed the README.
  * Schema's include the functions for encoding the data to the LoRaWAN payload as well.
  *
- * @version 0.1
- * @date 2021-08-24
+ * @version 0.2
+ * @date 2022-01-13
  *
  * @copyright (c) 2021 Kalina Knight - MIT License
  */
