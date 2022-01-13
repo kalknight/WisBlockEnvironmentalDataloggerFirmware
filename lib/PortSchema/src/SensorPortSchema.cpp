@@ -35,10 +35,12 @@ bool sensorData::printable(char *buffer, int buffer_len, bool print_valid_only) 
     gas_values[strlen(gas_values) - 2] = '\0';
     loc_values[strlen(loc_values) - 2] = '\0';
 
-    snprintf(buffer, buffer_len, "b(mV): {%s}, t(C): {%s}, h(%%): {%s}, p(Pa): {%s}, g: {%s}, l: {%s}", bat_values,
-             temp_values, humi_values, pres_values, gas_values, loc_values);
+    if (snprintf(buffer, buffer_len, "b(mV): {%s}, t(C): {%s}, h(%%): {%s}, p(Pa): {%s}, g: {%s}, l: {%s}", bat_values,
+                 temp_values, humi_values, pres_values, gas_values, loc_values) >= buffer_len) {
+        return false;
+    }
 
-    return false;
+    return true;
 }
 
 /**
