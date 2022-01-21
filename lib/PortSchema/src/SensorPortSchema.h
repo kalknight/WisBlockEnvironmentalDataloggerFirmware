@@ -15,8 +15,6 @@
 
 #include <math.h>
 
-#include "Particle.h"
-
 /**
  * @brief Struct with data from sensors and their validity.
  * Data can be invalid for a variety of reasons e.g. sensor experienced an error taking a reading, the GPS may not have
