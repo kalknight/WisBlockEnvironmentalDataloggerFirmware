@@ -9,22 +9,22 @@ bool sensorData::printable(char *buffer, int buffer_len, bool print_valid_only) 
     char loc_values[300] = {};
     for (int i = 0; i < MAX_SENSOR_VALUES; i++) {
         if (battery_mv[i].is_valid) {
-            snprintf(bat_values, sizeof(bat_values), "%s%.2f, ", battery_mv[i].value);
+            snprintf(bat_values, sizeof(bat_values), "%s%.2f, ", bat_values, battery_mv[i].value);
         }
         if (temperature[i].is_valid) {
-            snprintf(temp_values, sizeof(temp_values), "%s%.2f, ", temperature[i].value);
+            snprintf(temp_values, sizeof(temp_values), "%s%.2f, ", temp_values, temperature[i].value);
         }
         if (humidity[i].is_valid) {
-            snprintf(humi_values, sizeof(humi_values), "%s%.2f, ", humidity[i].value);
+            snprintf(humi_values, sizeof(humi_values), "%s%.2f, ", humi_values, humidity[i].value);
         }
         if (pressure[i].is_valid) {
-            snprintf(pres_values, sizeof(pres_values), "%s%lu, ", pressure[i].value);
+            snprintf(pres_values, sizeof(pres_values), "%s%lu, ", pres_values, pressure[i].value);
         }
         if (gas_resist[i].is_valid) {
-            snprintf(gas_values, sizeof(gas_values), "%s%lu, ", gas_resist[i].value);
+            snprintf(gas_values, sizeof(gas_values), "%s%lu, ", gas_values, gas_resist[i].value);
         }
         if (location[i].is_valid) {
-            snprintf(loc_values, sizeof(loc_values), "%s(%.5f, %.5f), ", location[i].latitude, location[i].longitude);
+            snprintf(loc_values, sizeof(loc_values), "%s(%.5f, %.5f), ", loc_values, location[i].latitude, location[i].longitude);
         }
     }
     // delete the last ", " from the strings
@@ -159,7 +159,7 @@ uint8_t decodeDataWithSchema(T *sensor_data, bool *valid, uint8_t *buffer, uint8
         }
     }
 
-    if ((sensor_schema->is_signed && (data_to_decode == 0x7F7F7F7F)), | (data_to_decode == 0xFFFFFFFF)) {
+    if ((sensor_schema->is_signed && (data_to_decode == 0x7F7F7F7F)) || (data_to_decode == 0xFFFFFFFF)) {
         *valid = false;
     } else {
         *valid = true;
