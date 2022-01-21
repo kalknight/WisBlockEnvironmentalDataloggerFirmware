@@ -1,3 +1,6 @@
+#ifndef SENSOR_HELPER_H
+#define SENSOR_HELPER_H
+
 /**
  * @file SensorHelper.h
  * @author Kalina Knight
@@ -41,3 +44,5 @@ bool initSensors(const portSchema *port_settings, bool useRAK1901, bool useRAK19
  * @return The sensor data in sensorData struct format.
  */
 sensorData getSensorData(const portSchema *port_settings);
+
+#endif // SENSOR_HELPER_H
