@@ -16,7 +16,12 @@
 #include "SensorPortSchema.h" /**< Go here for the individual sensor schema definitions. */
 
 /** @brief portSchema describes which sensor data to include in each port and hence the payload. */
-struct portSchema {
+class portSchema {
+  private:
+    bool (*init_s)(portSchema *);
+    sensorData (*read_s)(portSchema *);
+
+  public:
     uint8_t port_number;
 
     /**< Number of sensor data readings of that type included in this port. If == 0 then data from that sensor is not
@@ -30,6 +35,10 @@ struct portSchema {
     /* An example of a new sensor:
     uint8_t sendNewSensor;
     */
+
+    portSchema(uint8_t _port_number, uint8_t _sendBatteryVoltage, uint8_t _sendTemperature,
+               uint8_t _sendRelativeHumidity, uint8_t _sendAirPressure, uint8_t _sendGasResistance,
+               uint8_t _sendLocation, bool (*initSensors)(portSchema *), sensorData (*readSensors)(portSchema *));
 
     /**
      * @brief Encodes the given sensor data into the payload according to the port's schema.
@@ -68,6 +77,9 @@ struct portSchema {
      * @return Another port schema object that combines the given ports.
      */
     portSchema operator+(const portSchema &port2) const;
+
+    bool initSensors() { return init_s(this); };
+    sensorData readSensors() { return read_s(this); };
 };
 
 /**
@@ -77,218 +89,19 @@ struct portSchema {
  */
 portSchema getPort(uint8_t port_number);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool initPortErrorSensors(portSchema *port);
+sensorData readPortErrorSensors(portSchema *port);
 
-// SCHEMA DEFINITIONS: See readme for definitions in tabular format.
-
-const portSchema PORTERROR = {
-    __UINT8_MAX__, // port_number
-    0,             // sendBatteryVoltage
-    0,             // sendTemperature
-    0,             // sendRelativeHumidity
-    0,             // sendAirPressure
-    0,             // sendGasResistance
-    0              // sendLocation
-};
-
-const portSchema PORT1 = {
-    1, // port_number
-    1, // sendBatteryVoltage
-    0, // sendTemperature
-    0, // sendRelativeHumidity
-    0, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
-
-const portSchema PORT2 = {
-    2, // port_number
-    0, // sendBatteryVoltage
-    1, // sendTemperature
-    0, // sendRelativeHumidity
-    0, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
-
-const portSchema PORT3 = {
-    3, // port_number
-    1, // sendBatteryVoltage
-    1, // sendTemperature
-    0, // sendRelativeHumidity
-    0, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
-
-const portSchema PORT4 = {
-    4, // port_number
-    0, // sendBatteryVoltage
-    1, // sendTemperature
-    1, // sendRelativeHumidity
-    0, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
-
-const portSchema PORT5 = {
-    5, // port_number
-    1, // sendBatteryVoltage
-    1, // sendTemperature
-    1, // sendRelativeHumidity
-    0, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
-
-const portSchema PORT6 = {
-    6, // port_number
-    0, // sendBatteryVoltage
-    1, // sendTemperature
-    1, // sendRelativeHumidity
-    1, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
-const portSchema PORT7 = {
-    7, // port_number
-    1, // sendBatteryVoltage
-    1, // sendTemperature
-    1, // sendRelativeHumidity
-    1, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
-
-const portSchema PORT8 = {
-    8, // port_number
-    0, // sendBatteryVoltage
-    1, // sendTemperature
-    1, // sendRelativeHumidity
-    1, // sendAirPressure
-    1, // sendGasResistance
-    0  // sendLocation
-};
-
-const portSchema PORT9 = {
-    9, // port_number
-    1, // sendBatteryVoltage
-    1, // sendTemperature
-    1, // sendRelativeHumidity
-    1, // sendAirPressure
-    1, // sendGasResistance
-    0  // sendLocation
-};
-
-const portSchema PORT50 = {
-    50, // port_number
-    0,  // sendBatteryVoltage
-    0,  // sendTemperature
-    0,  // sendRelativeHumidity
-    0,  // sendAirPressure
-    0,  // sendGasResistance
-    1   // sendLocation
-};
-
-const portSchema PORT51 = {
-    51, // port_number
-    1,  // sendBatteryVoltage
-    0,  // sendTemperature
-    0,  // sendRelativeHumidity
-    0,  // sendAirPressure
-    0,  // sendGasResistance
-    1   // sendLocation
-};
-
-const portSchema PORT52 = {
-    52, // port_number
-    0,  // sendBatteryVoltage
-    1,  // sendTemperature
-    0,  // sendRelativeHumidity
-    0,  // sendAirPressure
-    0,  // sendGasResistance
-    1   // sendLocation
-};
-
-const portSchema PORT53 = {
-    53, // port_number
-    1,  // sendBatteryVoltage
-    1,  // sendTemperature
-    0,  // sendRelativeHumidity
-    0,  // sendAirPressure
-    0,  // sendGasResistance
-    1   // sendLocation
-};
-
-const portSchema PORT54 = {
-    54, // port_number
-    0,  // sendBatteryVoltage
-    1,  // sendTemperature
-    1,  // sendRelativeHumidity
-    0,  // sendAirPressure
-    0,  // sendGasResistance
-    1   // sendLocation
-};
-
-const portSchema PORT55 = {
-    55, // port_number
-    1,  // sendBatteryVoltage
-    1,  // sendTemperature
-    1,  // sendRelativeHumidity
-    0,  // sendAirPressure
-    0,  // sendGasResistance
-    1   // sendLocation
-};
-
-const portSchema PORT56 = {
-    56, // port_number
-    0,  // sendBatteryVoltage
-    1,  // sendTemperature
-    1,  // sendRelativeHumidity
-    1,  // sendAirPressure
-    0,  // sendGasResistance
-    1   // sendLocation
-};
-const portSchema PORT57 = {
-    57, // port_number
-    1,  // sendBatteryVoltage
-    1,  // sendTemperature
-    1,  // sendRelativeHumidity
-    1,  // sendAirPressure
-    0,  // sendGasResistance
-    1   // sendLocation
-};
-
-const portSchema PORT58 = {
-    58, // port_number
-    0,  // sendBatteryVoltage
-    1,  // sendTemperature
-    1,  // sendRelativeHumidity
-    1,  // sendAirPressure
-    1,  // sendGasResistance
-    1   // sendLocation
-};
-
-const portSchema PORT59 = {
-    59, // port_number
-    1,  // sendBatteryVoltage
-    1,  // sendTemperature
-    1,  // sendRelativeHumidity
-    1,  // sendAirPressure
-    1,  // sendGasResistance
-    1   // sendLocation
-};
-
-/* An example of a new port:
-const portSchema PORTX = {
-    X, // port_number
-    0, // sendBatteryVoltage
-    0, // sendTemperature
-    0, // sendRelativeHumidity
-    0, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
-*/
+const portSchema PORTERROR( // Port returned when error has occurred
+    __UINT8_MAX__,          // port_number
+    0,                      // sendBatteryVoltage
+    0,                      // sendTemperature
+    0,                      // sendRelativeHumidity
+    0,                      // sendAirPressure
+    0,                      // sendGasResistance
+    0,                      // sendLocation
+    &initPortErrorSensors,  // initSensors
+    &readPortErrorSensors   // readSensors
+);
 
 #endif // PORT_SCHEMA_H
