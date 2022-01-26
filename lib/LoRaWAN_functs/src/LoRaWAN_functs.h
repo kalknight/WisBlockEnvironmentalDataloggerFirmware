@@ -6,8 +6,8 @@
  * The OTAA keys are defined locally (not remotely on GitHub) in a separate header file; see the README for further
  * explanantion.
  *
- * @version 0.1
- * @date 2021-08-24
+ * @version 0.2
+ * @date 2022-01-26
  *
  * @copyright (c) 2021 Kalina Knight - MIT License
  */
@@ -29,9 +29,11 @@ static const lmh_confirm loraConfirm = LMH_UNCONFIRMED_MSG;     /**< Confirm/unc
  * @param deviceEUI OTAA key device EUI.
  * @param appKey    OTAA key app key.
  * @param tx_power  TX power setting. (Defaults to LORAWAN_DEFAULT_TX_POWER). TX_POWER_0 - TX_POWER_10 valid for AU915.
+ * @param datarate  Datarate setting. (Defaults to LORAWAN_DEFAULT_DATARATE). DR_0 to DR_5 valid for AU915.
  * @return True if successful, false if not.
  */
-bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t tx_power = LORAWAN_DEFAULT_TX_POWER);
+bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t tx_power = LORAWAN_DEFAULT_TX_POWER,
+                 uint8_t datarate = LORAWAN_DEFAULT_DATARATE);
 
 /**
  * @brief Initialise LoRaWAN.
@@ -40,9 +42,11 @@ bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t t
  * @param deviceEUI OTAA key device EUI.
  * @param appKey    OTAA key app key.
  * @param tx_power  TX power setting. (Defaults to LORAWAN_DEFAULT_TX_POWER). TX_POWER_0 - TX_POWER_10 valid for AU915.
+ * @param datarate  Datarate setting. (Defaults to LORAWAN_DEFAULT_DATARATE). DR_0 to DR_5 valid for AU915.
  * @return True if successful, false if not.
  */
-bool initLoRaWAN(SoftwareTimer *timer, uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t tx_power = LORAWAN_DEFAULT_TX_POWER);
+bool initLoRaWAN(SoftwareTimer *timer, uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey,
+                 uint8_t tx_power = LORAWAN_DEFAULT_TX_POWER, uint8_t datarate = LORAWAN_DEFAULT_DATARATE);
 
 /**
  * @brief Attempt to join the LoRaWAN network.
