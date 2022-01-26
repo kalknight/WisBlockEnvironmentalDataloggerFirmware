@@ -1,6 +1,19 @@
 #ifndef EXAMPLE_SENSOR_READING_FUNCTS_H
 #define EXAMPLE_SENSOR_READING_FUNCTS_H
 
+/**
+ * @file SensorReadingFuncts.h
+ * @author Kalina Knight (kalina.knight77@gmail.com)
+ * @brief  An example of custom sensor initialisation and reading functions for each port.
+ * These functions are all just using initSensors() & getSensorData() from SensorHelper.h, but they can all be different
+ * depending on the hardware and usage.
+ *
+ * @version 0.3
+ * @date 2022-01-13
+ *
+ * @copyright (c) 2021 Kalina Knight - MIT License
+ */
+
 #include "PortSchema.h"
 #include "SensorHelper.h"
 

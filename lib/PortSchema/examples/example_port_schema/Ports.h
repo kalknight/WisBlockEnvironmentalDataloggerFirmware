@@ -1,9 +1,20 @@
+#ifndef PORTS_H
+#define PORTS_H
+
+/**
+ * @file Ports.h
+ * @author Kalina Knight (kalina.knight77@gmail.com)
+ * @brief An example of a port schema. See readme for definitions in tabular format.
+ * Feel free to copy, delete, modify and create whatever port schema suits your purpose.
+ *
+ * @version 0.3
+ * @date 2022-01-13
+ *
+ * @copyright (c) 2021 Kalina Knight - MIT License
+ */
+
 #include "PortSchema.h"
 #include "SensorReadingFuncts.h"
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// SCHEMA DEFINITIONS: See readme for definitions in tabular format.
 
 const portSchema PORT1( // Port 1
     1,                  // port_number
@@ -251,3 +262,15 @@ const portSchema PORTX( // Port X
     &readPortSensorsX   // readSensors
 );
 */
+
+portSchema all_ports[] = { PORTERROR, PORT1,  PORT2,  PORT3,  PORT4,  PORT5,  PORT6,  PORT7,  PORT8,  PORT9,
+                           PORT50,    PORT51, PORT52, PORT53, PORT54, PORT55, PORT56, PORT57, PORT58, PORT59 };
+
+/**
+ * @brief Get the Port object for the given port number.
+ * @param port_number
+ * @return Returns the portSchema.
+ */
+portSchema getPort(uint8_t port_number);
+
+#endif // PORTS_H

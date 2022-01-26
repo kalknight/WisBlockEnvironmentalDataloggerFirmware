@@ -9,7 +9,8 @@ sensorData readPortSensors(portSchema *port) {
 }
 
 bool initPort1Sensors(portSchema *port) {
-    return initPortSensors(port);
+    // Neither 1901 or 1906 is needed for PORT1
+    return initSensors(port, false, false);
 }
 
 sensorData readPort1Sensors(portSchema *port) {
@@ -81,7 +82,8 @@ sensorData readPort9Sensors(portSchema *port) {
 }
 
 bool initPort50Sensors(portSchema *port) {
-    return initPortSensors(port);
+    // Neither 1901 or 1906 is needed for PORT50
+    return initSensors(port, false, false);
 }
 
 sensorData readPort50Sensors(portSchema *port) {
