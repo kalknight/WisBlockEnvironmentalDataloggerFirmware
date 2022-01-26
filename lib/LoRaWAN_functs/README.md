@@ -135,4 +135,4 @@ The OTAA keys should be unique for each device (as they are on TTS) anf unfortun
 
 ## Version 0.3
 
-- Changed `startLoRaWANJoinProcedure()` to `joinLoRaWAN()` which is now a blocking call. This also means the SoftwareTimer pointer does not need to be passed to `initLoRaWAN()`.
+- Changed `startLoRaWANJoinProcedure()` to `joinLoRaWAN()` which is now a blocking call. This also means the SoftwareTimer pointer does not need to be passed to `initLoRaWAN()` and so has been removed.

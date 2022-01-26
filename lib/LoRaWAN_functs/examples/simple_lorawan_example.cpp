@@ -44,7 +44,7 @@ void setup() {
     }
 
     // Attempt to join the network
-    startLoRaWANJoinProcedure();
+    joinLoRaWAN();
 }
 
 /**

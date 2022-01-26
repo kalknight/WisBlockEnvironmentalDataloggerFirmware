@@ -75,16 +75,16 @@ void setup() {
     appTimerInit();
 
     // Init LoRaWAN
-    if (!initLoRaWAN(&payloadTimer, OTAA_KEY_APP_EUI, OTAA_KEY_DEV_EUI, OTAA_KEY_APP_KEY)) {
+    if (!initLoRaWAN(OTAA_KEY_APP_EUI, OTAA_KEY_DEV_EUI, OTAA_KEY_APP_KEY)) {
         delay(1000);
         return;
     }
 
     // Attempt to join the network
-    startLoRaWANJoinProcedure();
-
-    // Go to 'sleep' now that setup is complete until an event task is triggered
-    current_task = EVENT_TASK::SLEEP;
+    if (joinLoRaWAN()) {
+        payloadTimer.start();
+        current_task = EVENT_TASK::SEND_PAYLOAD;
+    }
 }
 
 /**
