@@ -25,7 +25,7 @@ Software:
 Steps:
 
 1. Include SensorHelper.h in the main file.
-2. Create a port and set it equal to one of the ports defined in PortSchema.h e.g.: `portSchema port = PORT1;`. See an explanation of [port schemas](../PortSchema/).
+2. Create a port and set it equal to one of the ports defined in Ports.h e.g.: `portSchema port = PORT1;`. See an explanation of [port schemas](../PortSchema/).
 3. Check that the correct sensors have been inserted into the base board.
 4. Initialise the sensors in `setup()` by passing the created `port` and chosen RAK sensor(s) to `initSensors()`.
 5. Start reading the sensors by passing the `port` to `getSensorData()`.

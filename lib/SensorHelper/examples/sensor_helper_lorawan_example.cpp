@@ -19,7 +19,7 @@
 #include "LoRaWAN_functs.h" /**< Go here to provide the OTAA keys & change the LoRaWAN settings. */
 #include "Logging.h"        /**< Go here to change the logging level for the entire application. */
 #include "OTAA_keys.h"      /**< Go here to set the OTAA keys (See LoRaWAN_functs README). */
-#include "PortSchema.h"     /**< Go here to see existing and define new sensor/port schemas. */
+#include "Ports.h"          /**< Go here to see existing and define new sensor/port schemas. */
 #include "SensorHelper.h"   /**< Go here to add code for new additional sensors. */
 
 // PORT/SENSOR SELECTION
