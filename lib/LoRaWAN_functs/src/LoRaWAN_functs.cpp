@@ -1,8 +1,5 @@
 #include "LoRaWAN_functs.h"
 
-// pointer set by initLoRaWAN() to be used by lorawanJoinedHandler() to start timer that sends payloads
-SoftwareTimer *timer_to_start_on_join = nullptr;
-
 // LoRaWan parameters & callbacks used in initLoRaWAN()
 lmh_param_t lora_init_params;
 lmh_callback_t lora_init_callbacks;
@@ -51,12 +48,14 @@ bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t t
     return true;
 }
 
-bool initLoRaWAN(SoftwareTimer *timer, uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t tx_power, uint8_t datarate) {
-    // Save the timer so it can be started later by lorawanJoinedHandler()
-    timer_to_start_on_join = timer;
-    // Then init LoRaWAN
-    return initLoRaWAN(appEUI, deviceEUI, appKey, tx_power, datarate);
-}
+bool joinLoRaWAN(void) {
+    lmh_join();
+    // keep checking if we've joined
+    while (lmh_join_status_get() == LMH_ONGOING) {
+        delay(1000);
+    }
+    return isLoRaWANConnected();
+};
 
 // used by sendLoRaWANFrame() for logging
 uint32_t count = 0;
@@ -85,12 +84,7 @@ void sendLoRaWANFrame(lmh_app_data_t *lora_app_data) {
  */
 void lorawanJoinedHandler(void) {
     log(LOG_LEVEL::INFO, "Network Joined!");
-    if (setLoRaWANClass()) {
-        // if given a SoftwareTimer in initLoRaWAN
-        if (timer_to_start_on_join != NULL) {
-            timer_to_start_on_join->start();
-        }
-    }
+    setLoRaWANClass();
     delay(1000); // This ensures the log message is printed
 }
 

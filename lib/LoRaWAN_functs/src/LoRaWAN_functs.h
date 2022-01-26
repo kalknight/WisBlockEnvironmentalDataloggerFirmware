@@ -6,7 +6,7 @@
  * The OTAA keys are defined locally (not remotely on GitHub) in a separate header file; see the README for further
  * explanantion.
  *
- * @version 0.2
+ * @version 0.3
  * @date 2022-01-26
  *
  * @copyright (c) 2021 Kalina Knight - MIT License
@@ -36,25 +36,10 @@ bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t t
                  uint8_t datarate = LORAWAN_DEFAULT_DATARATE);
 
 /**
- * @brief Initialise LoRaWAN.
- * @param timer     Timer that will be started once network has been successfully joined.
- * @param appEUI    OTAA key app EUI.
- * @param deviceEUI OTAA key device EUI.
- * @param appKey    OTAA key app key.
- * @param tx_power  TX power setting. (Defaults to LORAWAN_DEFAULT_TX_POWER). TX_POWER_0 - TX_POWER_10 valid for AU915.
- * @param datarate  Datarate setting. (Defaults to LORAWAN_DEFAULT_DATARATE). DR_0 to DR_5 valid for AU915.
- * @return True if successful, false if not.
- */
-bool initLoRaWAN(SoftwareTimer *timer, uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey,
-                 uint8_t tx_power = LORAWAN_DEFAULT_TX_POWER, uint8_t datarate = LORAWAN_DEFAULT_DATARATE);
-
-/**
  * @brief Attempt to join the LoRaWAN network.
- * Once connected the joined callback set in initLoRaWAN() will be called.
+ * @return True if successfully joined. False if not.
  */
-inline void startLoRaWANJoinProcedure(void) {
-    lmh_join();
-};
+bool joinLoRaWAN(void);
 
 /**
  * @brief Sends a frame with the data provided.

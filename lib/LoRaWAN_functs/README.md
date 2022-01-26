@@ -23,7 +23,7 @@ Steps:
 2. Follow the [steps below](#otaa-keys) to add the OTAA keys.
 3. Check the LoRaWAN config/parameters at the top of LoRaWAN_functs.h.
 4. Initialise the LoRaWAN module in `setup()` with `initLoRaWAN()`.
-5. Join the network with `startLoRaWANJoinProcedure()`.
+5. Join the network with `joinLoRaWAN()`.
 6. Once connected, start sending with `sendLoRaWANFrame()`.
 
 ### Example
@@ -56,7 +56,7 @@ void setup() {
     }
 
     // Attempt to join the network
-    startLoRaWANJoinProcedure();
+    joinLoRaWAN();
 }
 
 void loop() {
@@ -132,3 +132,7 @@ The OTAA keys should be unique for each device (as they are on TTS) anf unfortun
 ## Version 0.2
 
 - Added datarate option to `initLoRaWAN()`, defaulting to `LORAWAN_DEFAULT_DATARATE` = `DR_3`.
+
+## Version 0.3
+
+- Changed `startLoRaWANJoinProcedure()` to `joinLoRaWAN()` which is now a blocking call. This also means the SoftwareTimer pointer does not need to be passed to `initLoRaWAN()`.
