@@ -20,9 +20,10 @@ Software:
 
 Steps:
 
-1. Include PortSchema.h in the main file.
-2. Create a port and set it equal to one of the ports defined in PortSchema.h e.g.: `portSchema port = PORT1;`. See explanation of [port schemas](#lorawan-ports) below.
-3. Fill a `sensorData` struct with data and pass it to the port to encode with `portSchema::encodeSensorDataToPayload()`
+1. Copy the contents of the examples\example_port_schema folder to the same file location as your main file.
+2. Include Ports.h in the main file.
+3. Create a port and set it equal to one of the ports defined in Ports.h e.g.: `portSchema port = PORT1;`. See explanation of [port schemas](#lorawan-ports) below.
+4. Fill a `sensorData` struct with data and pass it to the port to encode with `portSchema::encodeSensorDataToPayload()`
 
 ### Simple Example
 
@@ -33,7 +34,7 @@ _Copied from examples\port_schema_simple_example.cpp:_
 #include <LoRaWan-RAK4630.h> // Click to get library: https://platformio.org/lib/show/6601/SX126x-Arduino
 
 #include "Logging.h"    /**< Go here to change the logging level for the entire application. */
-#include "PortSchema.h" /**< Go here to see existing and define new sensor/port schemas. */
+#include "Ports.h"      /**< Go here to see existing and define new sensor/port schemas. */
 
 // PORT/SENSOR SELECTION
 // The chosen port determines the sensor data included in the payload - see PortSchema.h
@@ -59,7 +60,6 @@ lmh_app_data_t lorawan_payload = { payload_buffer, 0, 0, 0, 0 }; /**< Struct tha
 void setup() {
     // initialise the logging module - function does nothing if APP_LOG_LEVEL in Logging.h = NONE
     initLogging();
-
 
     // fill with fake data, making sure to set the validity flag to true
     sensor_data.battery_mv[0] = { 1, true };
@@ -119,7 +119,7 @@ The schema has been designed with a couple of rules:
 
 ### Port Definitions
 
-Currently 19 ports have been designed and assigned a port number (PN) (see [portSchema](#portschema) for how they're defined in code). They're all just sending a single sensor reading of each type for this example:
+Currently 19 [example ports](examples\example_port_schema\Ports.h) have been designed and assigned a port number (PN) (see [portSchema](#portschema) for how they're defined in code). They're all just sending a single sensor reading of each type for this example:
 
 | Port Number (PN) | Battery Voltage | Temperature | Relative Humidity | Air Pressure | Gas Resistance | Location | Total Length |
 | :--------------: | :-------------: | :---------: | :---------------: | :----------: | :------------: | :------: | :----------: |
@@ -143,7 +143,7 @@ Currently 19 ports have been designed and assigned a port number (PN) (see [port
 |        58        |        -        |      1      |         1         |      1       |       1        |    1     |      19      |
 |        59        |        1        |      1      |         1         |      1       |       1        |    1     |      21      |
 
-These have been designed with the assumption that it is unlikely for humidity data to be useful without temperature, for air pressure to be useful without humidity and temperature, etc. If this is not the case, if more ports are designed, and/or if [new sensors are added](#new-port-or-sensor-schema-instructions) then try to fit them into this existing port schema or mimic it in a way that is logical and extendable.
+These have been designed with the assumption that it is unlikely for humidity data to be useful without temperature, for air pressure to be useful without humidity and temperature, etc. **If this is not the case, if more ports are designed, and/or if [new sensors are added](#new-port-or-sensor-schema-instructions) then try to fit them into this existing port schema or mimic it in a way that is logical and extendable.**
 
 ### Sensor Data Payload Encoding
 
@@ -225,80 +225,26 @@ will be encoded that fills the number of bytes assigned to that sensor data and 
 
 > E.g. For an invalid 2 byte signed the value will be 0x7f7f.
 
-This has been elected as an alternative to changing the port number to match what sensor data is available, as otherwise it would be difficult to tell the difference between a sensor having issues and the wrong port being used. See the [suggested next steps for the decoder](https://github.com/minisolarunsw/LoRaWANProjectRepo/tree/main/Ubidots/PayloadDecoder/#suggested-next-steps) on ways the invalid data could be used more intelligently.
+This has been elected as an alternative to changing the port number to match what sensor data is available, as otherwise it would be difficult to tell the difference between a sensor having issues and the wrong port being used.
 
 ### portSchema
 
-portSchema is a struct with the port number and series of flags that define which sensor data is included in the lora frame for that port number.
+The portSchema class is instantiated for each port with the assigned port number and the number of sensor readings of each type to include in the payload. Optionally function pointers to a sensor initialisation and reading can be passed to allow the port number to be directly tied to the hardware design/operation.
+
+E.g.:
 
 ```c++
-struct portSchema {
-    uint8_t port_number;
-
-    /**< Number of sensor data readings of that type included in this port. If == 0 then data from that sensor is not
-     * included at all. */
-    uint8_t sendBatteryVoltage;
-    uint8_t sendTemperature;
-    uint8_t sendRelativeHumidity;
-    uint8_t sendAirPressure;
-    uint8_t sendGasResistance;
-    uint8_t sendLocation;
-    /* An example of a new sensor:
-    uint8_t sendNewSensor;
-    */
-
-    /**
-     * @brief Encodes the given sensor data into the payload according to the port's schema.
-     * Calls sensorPortSchema::encodeData for each sensor.
-     * @param sensor_data Sensor data to be encoded.
-     * @param payload_buffer Payload buffer for data to be written into.
-     * @param start_pos Start encoding data at this byte. Defaults to 0.
-     * @return Total length of data encoded to payload_buffer.
-     */
-    uint8_t encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer, uint8_t start_pos = 0);
-
-    /**
-     * @brief Decodes the given payload into the sensor data according to the port's schema.
-     * Calls sensorPortSchema::decodeData for each sensor.
-     * @param buffer Payload buffer to be decoded.
-     * @param len Length of payload buffer.
-     * @param start_pos Start decoding data at this byte. Defaults to 0.
-     * @return Decoded sensor data.
-     */
-    sensorData decodePayloadToSensorData(uint8_t *buffer, uint8_t len, uint8_t start_pos = 0);
-
-    /**
-     * @brief Compares for full equivalence between two port objects.
-     *
-     * @param port2 Second port that this port is compared to.
-     * @return True if they're equivalent, false if not.
-     */
-    bool operator==(const portSchema &port2);
-
-    /**
-     * @brief Combines two ports into separate port.
-     * The port number is set to 0, and the send sensor flags are ||'ed.
-     * Useful for sensor initiatlisation if using the port definition for this purpose.
-     *
-     * @param port2 Second port that this port is combined with.
-     * @return Another port schema object that combines the given ports.
-     */
-    portSchema &operator+(const portSchema &port2) const;
-};
-```
-
-To define a port, instantiate the portSchema struct with the port number and flags defined, e.g.:
-
-```c++
-const portSchema PORT1 = {
-    1, // port_number
-    1, // sendBatteryVoltage
-    0, // sendTemperature
-    0, // sendRelativeHumidity
-    0, // sendAirPressure
-    0, // sendGasResistance
-    0  // sendLocation
-};
+const portSchema PORT1( // Port 1
+    1,                  // port_number
+    1,                  // sendBatteryVoltage
+    0,                  // sendTemperature
+    0,                  // sendRelativeHumidity
+    0,                  // sendAirPressure
+    0,                  // sendGasResistance
+    0,                  // sendLocation
+    &initPort1Sensors,  // initSensors
+    &readPort1Sensors   // readSensors
+);
 ```
 
 ### sensorPortSchema
@@ -367,7 +313,7 @@ static const sensorPortSchema temperatureSchema = { // units: degrees C
 };
 ```
 
-If one needs to be modified (e.g. the number of bytes, scaling factor, etc.) or a [new sensor added](#new-port-or-sensor-schema-instructions) this needs to be done in the SensorPortSchema.h file.
+To extend or modify (e.g. the number of bytes, scaling factor, etc.) the sensor port schemas or [add anew sensor](#new-port-or-sensor-schema-instructions) this needs to be done in the SensorPortSchema.h file.
 
 ### New Port or Sensor Schema Instructions
 
@@ -389,14 +335,20 @@ To add a new sensor, it is best practice to define a new port that includes the 
 4. Add the new port with `const portSchema PORTX = {...};`, replacing `X` with the new port number.
 5. Finally add the port to the [decoder on the web-app side](https://github.com/minisolarunsw/LoRaWANProjectRepo/tree/main/Ubidots/PayloadDecoder).
 
-You should also update the table(s) above with the new port/sensor schema.
+You should also update a copy of the table(s) above with the new port/sensor schema.
 
 ## Suggested Next Steps
 
-Obivously the port & sensor schema's have been set up around sensor data, however with a bit of creativity they can also easily be adapted to send other data that makes sense to be sent regularly/accompany sensor data e.g. if an RTC was added to the devices then a timestamp could be added to the schema, assigned a port number and included in the payload; or likewise if a _short_ string (not really something lora is good at), or ping of some sort needs to be sent it, too could be added to the schema, assigned a port number and included in the payload. Either way the port number that is sent with every payload should be used as a tool and not just a wasted byte of data.
+Obivously the port & sensor schema's have been set up around sensor data, however with a bit of creativity they can also easily be adapted to send other data that makes sense to be sent regularly/accompany sensor data e.g. if an RTC was added to the devices then a timestamp could be added to the schema, assigned a port number and included in the payload; or likewise if a _short_ string (not really something lora is good at), or ping of some sort needs to be sent, it too could be added to the schema, assigned a port number and included in the payload. Either way the port number that is sent with every payload should be used as a tool and not just a wasted byte of data.
 
 ## Version 0.2
 
 - Upgraded port schema to handle multiple of each sensor type.
 - Changed sensorData such that each sensor struct is now an array of `MAX_SENSOR_VALUES` length.
 - Added `bool sensorData::printable(...)` member function to format a printable version of the sensor data.
+
+## Version 0.3
+
+- The port schema now includes function pointers to `initSensors()` & `readSensors` that need to be passed for each port declaration. This allows custom sensor operation to be associated with each unique port if desirable. An example of this is provided in the [examples\example_port_schema](examples\example_port_schema) folder in `SensorReadingFuncts.h`.
+- Moved port definitions out of `PortSchema.h`. These should now be defined by the user along with their other code.
+- The example port schema has been provided in the [examples\example_port_schema](examples\example_port_schema) folder in `Ports.h`; with the accompanying port sensor operation functions in `SensorReadingFuncts.h`.
