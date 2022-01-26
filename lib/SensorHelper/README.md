@@ -40,7 +40,7 @@ _Copied from examples\sensor_helper_simple_example.cpp:_
 #include <LoRaWan-RAK4630.h> // Click to get library: https://platformio.org/lib/show/6601/SX126x-Arduino
 
 #include "Logging.h"      /**< Go here to change the logging level for the entire application. */
-#include "PortSchema.h"   /**< Go here to see existing and define new sensor/port schemas. */
+#include "Ports.h"   /**< Go here to see existing and define new sensor/port schemas. */
 #include "SensorHelper.h" /**< Go here to add code for new additional sensors. */
 
 // PORT/SENSOR SELECTION
