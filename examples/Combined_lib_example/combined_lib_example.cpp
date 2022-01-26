@@ -15,7 +15,7 @@
 #include "LoRaWAN_functs.h" /**< Go here to change the LoRaWAN settings. */
 #include "Logging.h"        /**< Go here to change the logging level for the entire application. */
 #include "OTAA_keys.h"      /**< Go here to set the OTAA keys (See LoRaWAN_functs README). */
-#include "PortSchema.h"     /**< Go here to see existing and define new sensor/port schemas. */
+#include "Ports.h"          /**< Go here to see existing and define new sensor/port schemas. */
 #include "SensorHelper.h"   /**< Go here to add code for init-ing and reading new additional sensors. */
 
 // APP TIMER
@@ -64,8 +64,10 @@ void setup() {
     semaphore_handle = xSemaphoreCreateBinary();
 
     // Init sensors according to payload_port selected
-    // Neither 1901 or 1906 is needed for PORT1
-    if (!initSensors(&payload_port, false, false)) {
+    if (!payload_port.initSensors()) {
+        // OR USE initSensors() FROM SensorHelper.h
+        // if (!initSensors(&payload_port, false, false)) {
+
         // error init-ing sensors
         delay(1000);
         return;
@@ -158,7 +160,9 @@ void appTimerTimeoutHandler(TimerHandle_t unused) {
 void fillPayload(void) {
     // get the sensor data
     sensorData sensor_data = {};
-    sensor_data = getSensorData(&payload_port);
+    sensor_data = payload_port.readSensors();
+    // OR USE getSensorData() FROM SensorHelper.h
+    // sensor_data = getSensorData(&payload_port);
 
     // log sensor data
     char log_sensor_data[MAX_LOG_LENGTH] = {};

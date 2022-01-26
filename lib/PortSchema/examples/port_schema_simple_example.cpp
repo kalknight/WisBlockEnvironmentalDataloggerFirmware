@@ -14,8 +14,8 @@
 #include <Arduino.h>
 #include <LoRaWan-RAK4630.h> // Click to get library: https://platformio.org/lib/show/6601/SX126x-Arduino
 
-#include "Logging.h"    /**< Go here to change the logging level for the entire application. */
-#include "PortSchema.h" /**< Go here to see existing and define new sensor/port schemas. */
+#include "Logging.h" /**< Go here to change the logging level for the entire application. */
+#include "Ports.h"   /**< Go here to see existing and define new sensor/port schemas. */
 
 // PORT/SENSOR SELECTION
 // The chosen port determines the sensor data included in the payload - see PortSchema.h

@@ -26,11 +26,12 @@ Steps:
 
 1. Copy the contents of Combined_lib_example.cpp into your main.cpp.
 2. Follow the steps to setup your [OTAA keys](../../lib/LoRaWAN_functs/#otaa-keys) (if not already completed).
-3. Set the `payload_port` to the port desired; see [Port Definitions](../../lib/PortSchema/#port-definitions).
-4. Check that the correct sensors have been inserted into the base board.
-5. Set the logging level to the desired level; see [Logging](../../lib/Logging/).
-6. Set the `lorawan_app_interval` to the interval desired, being mindful of the limitations imposed by the community LoRaWAN and Ubidots data throughput rate.
-7. Compile & flash.
+3. Copy the example port schema provided in [PortSchema](../../lib/PortSchema/#usage) by copying the contents of [PortSchema\examples\example_port_schema]](../../lib/PortSchema/examples/example_port_schema) folder to the same file location as your main file.
+4. Set the `payload_port` to the port desired; see [Port Definitions](../../lib/PortSchema/#port-definitions).
+5. Check that the correct sensors have been inserted into the base board.
+6. Set the logging level to the desired level; see [Logging](../../lib/Logging/).
+7. Set the `lorawan_app_interval` to the interval desired, being mindful of the limitations imposed by the community LoRaWAN and Ubidots data throughput rate.
+8. Compile & flash.
 
 Then to see the sensor data coming through you can check by:
 
