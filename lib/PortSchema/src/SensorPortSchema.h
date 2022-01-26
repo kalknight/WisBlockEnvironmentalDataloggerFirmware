@@ -2,13 +2,13 @@
 #define SENSOR_PORT_SCHEMA_H
 
 /**
- * @file PortSchema.h
+ * @file SensorPortSchema.h
  * @author Kalina Knight (kalina.knight77@gmail.com)
- * @brief Sensor port schema definitions as descibed the README.
+ * @brief Sensor port schema objects as descibed the README.
  * Schema's include the functions for encoding the data to the LoRaWAN payload as well.
  *
- * @version 0.2
- * @date 2022-01-13
+ * @version 0.3
+ * @date 2022-01-26
  *
  * @copyright (c) 2021 Kalina Knight - MIT License
  */

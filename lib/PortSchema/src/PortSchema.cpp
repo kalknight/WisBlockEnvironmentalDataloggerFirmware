@@ -1,17 +1,24 @@
 #include "PortSchema.h"
 
+portSchema::portSchema(uint8_t _port_number, uint8_t _sendBatteryVoltage, uint8_t _sendTemperature, uint8_t _sendRelativeHumidity,
+                       uint8_t _sendAirPressure, uint8_t _sendGasResistance, uint8_t _sendLocation) {
+    // pass error port sensor functions instead
+    portSchema(_port_number, _sendBatteryVoltage, _sendTemperature, _sendRelativeHumidity, _sendAirPressure,
+               _sendGasResistance, _sendLocation, &initPortErrorSensors, &readPortErrorSensors);
+}
+
 portSchema::portSchema(uint8_t _port_number, uint8_t _sendBatteryVoltage, uint8_t _sendTemperature,
                        uint8_t _sendRelativeHumidity, uint8_t _sendAirPressure, uint8_t _sendGasResistance,
-                       uint8_t _sendLocation, bool (*initSensors)(portSchema *), sensorData (*readSensors)(portSchema *)) {
+                       uint8_t _sendLocation, bool (*_initSensors)(portSchema *), sensorData (*_readSensors)(portSchema *)) {
     port_number = _port_number;
-    sendBatteryVoltage = _sendBatteryVoltage;
-    sendTemperature = _sendTemperature;
-    sendRelativeHumidity = _sendRelativeHumidity;
-    sendAirPressure = _sendAirPressure;
-    sendGasResistance = _sendGasResistance;
-    sendLocation = _sendLocation;
-    init_s = initSensors;
-    read_s = readSensors;
+    sendBatteryVoltage = min(MAX_SENSOR_VALUES, _sendBatteryVoltage);
+    sendTemperature = min(MAX_SENSOR_VALUES, _sendTemperature);
+    sendRelativeHumidity = min(MAX_SENSOR_VALUES, _sendRelativeHumidity);
+    sendAirPressure = min(MAX_SENSOR_VALUES, _sendAirPressure);
+    sendGasResistance = min(MAX_SENSOR_VALUES, _sendGasResistance);
+    sendLocation = min(MAX_SENSOR_VALUES, _sendLocation);
+    init_s = _initSensors;
+    read_s = _readSensors;
 }
 
 uint8_t portSchema::encodeSensorDataToPayload(sensorData *sensor_data, uint8_t *payload_buffer, uint8_t start_pos) {
@@ -109,7 +116,7 @@ portSchema portSchema::operator+(const portSchema &port2) const {
 
 bool initPortErrorSensors(portSchema *port) {
     return false;
-};
+}
 
 sensorData readPortErrorSensors(portSchema *port) {
     sensorData data = {};
