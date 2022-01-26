@@ -263,8 +263,8 @@ const portSchema PORTX( // Port X
 );
 */
 
-portSchema all_ports[] = { PORTERROR, PORT1,  PORT2,  PORT3,  PORT4,  PORT5,  PORT6,  PORT7,  PORT8,  PORT9,
-                           PORT50,    PORT51, PORT52, PORT53, PORT54, PORT55, PORT56, PORT57, PORT58, PORT59 };
+const portSchema all_ports[] = { PORTERROR, PORT1,  PORT2,  PORT3,  PORT4,  PORT5,  PORT6,  PORT7,  PORT8,  PORT9,
+                                 PORT50,    PORT51, PORT52, PORT53, PORT54, PORT55, PORT56, PORT57, PORT58, PORT59 };
 
 /**
  * @brief Get the Port object for the given port number.
