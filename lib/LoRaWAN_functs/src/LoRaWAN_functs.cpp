@@ -49,10 +49,14 @@ bool initLoRaWAN(uint8_t *appEUI, uint8_t *deviceEUI, uint8_t *appKey, uint8_t t
 }
 
 bool joinLoRaWAN(void) {
+    log(LOG_LEVEL::DEBUG, "Attempting to join LoRaWAN...");
     lmh_join();
-    // keep checking if we've joined
+    // wait while attempting to join
     while (lmh_join_status_get() == LMH_ONGOING) {
-        delay(1000);
+        // if (millis() % 1000 == 0) {
+        //     log(LOG_LEVEL::DEBUG, "join status: %d", lmh_join_status_get());
+        //     delay(2);
+        // }
     }
     return isLoRaWANConnected();
 };
@@ -85,17 +89,13 @@ void sendLoRaWANFrame(lmh_app_data_t *lora_app_data) {
 void lorawanJoinedHandler(void) {
     log(LOG_LEVEL::INFO, "Network Joined!");
     setLoRaWANClass();
-    delay(1000); // This ensures the log message is printed
 }
 
 /**
  * @brief LoRa function for handling OTAA join failed.
  */
 void lorawanJoinedFailedHandler(void) {
-    log(LOG_LEVEL::ERROR, "OTAA join failed!");
-    log(LOG_LEVEL::ERROR, "Check your EUI's and Keys's!");
-    log(LOG_LEVEL::ERROR, "Check if a Gateway is in range!");
-    delay(1000); // This ensures the log messages are printed
+    log(LOG_LEVEL::ERROR, "OTAA join failed! Check your EUI's and Keys's! Check if a Gateway is in range!");
 }
 
 /**
